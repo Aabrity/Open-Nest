@@ -24,33 +24,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         width: double.infinity,
         height: double.infinity,
         color: Colors.white,
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: isLandscape ? screenHeight * 0.05 : 0,
-              bottom: isLandscape ? screenHeight * 0.05 : 0,
-            ),
-            child: SingleChildScrollView( // Allow scrolling vertically, but avoid horizontal scrolling
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: isLandscape ? screenHeight * 0.05 : screenHeight * 0.02,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Logo with the same style as RegisterView
+                  // Logo Container
                   Container(
                     height: isLandscape ? screenHeight * 0.25 : screenHeight * 0.15,
-                    width: screenWidth * 0.3, // Restrict width in both modes
+                    width: screenWidth * 0.3,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0), // Slightly rounded edges
+                      borderRadius: BorderRadius.circular(20.0),
                       border: Border.all(
                         color: Colors.blueGrey,
                         width: 2.0,
                       ),
                       image: const DecorationImage(
-                        image: AssetImage('assets/images/logo.png'), // Replace with your logo asset
+                        image: AssetImage('assets/images/logo.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.03),
+                  SizedBox(height: screenHeight * 0.02),
+                  // Main Heading
                   Text(
                     "Home is where the Heart is.",
                     style: TextStyle(
@@ -60,8 +60,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.01),
+                  // Subtitle
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                     child: Text(
                       "Looking for your nest birdie? You found the right place. Let us help!",
                       textAlign: TextAlign.center,
@@ -72,9 +73,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.03),
-                  // Onboarding page content
+                  // Onboarding Pages
                   SizedBox(
-                    height: screenHeight * 0.45, // Adjusted to allow space for page content
+                    height: screenHeight * 0.4, // Reduced to leave space for other elements
                     child: PageView(
                       controller: _controller,
                       onPageChanged: (index) {
@@ -91,61 +92,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ],
                     ),
                   ),
-                  // Smooth Page Indicator
+                  // Page Indicator
                   SmoothPageIndicator(
                     controller: _controller,
                     count: 5,
                     effect: const ExpandingDotsEffect(activeDotColor: Colors.blue),
                   ),
-                  const SizedBox(height: 20),
-                  // Skip or Next button
+                  SizedBox(height: screenHeight * 0.02),
+                  // Navigation Button
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-                    child: _currentPage == 4
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                              backgroundColor: Colors.black, // Match the button style
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const SignInView()),
-                              );
-                            },
-                            child: Text(
-                              "Get Started",
-                              style: TextStyle(
-                                fontSize: isLandscape ? screenHeight * 0.05 : screenHeight * 0.025,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                              backgroundColor: Colors.black, // Match the button style
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            onPressed: () {
-                              _controller.nextPage(
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeIn,
-                              );
-                            },
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                fontSize: isLandscape ? screenHeight * 0.05 : screenHeight * 0.025,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (_currentPage == 4) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const SignInView()),
+                          );
+                        } else {
+                          _controller.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      },
+                      child: Text(
+                        _currentPage == 4 ? "Get Started" : "Next",
+                        style: TextStyle(
+                          fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.025,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -156,12 +141,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 
-  // Helper function to create each onboarding page
   Widget _buildPage(String imagePath, String title) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Image.asset(imagePath, height: 250), // Adjust image size as needed
+        Flexible(
+          child: Image.asset(
+            imagePath,
+            height: 250,
+            fit: BoxFit.contain,
+          ),
+        ),
         const SizedBox(height: 20),
         Text(
           title,
