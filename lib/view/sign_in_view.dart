@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:open_nest/view/sign_in_view.dart';
-import '../viewmodel/register_viewmodel.dart';
+import 'package:open_nest/view/register_view.dart';
+import '../viewmodel/sign_in_viewmodel.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+class SignInView extends StatefulWidget {
+  const SignInView({super.key});
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  _SignInViewState createState() => _SignInViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
-  final RegisterViewModel _viewModel = RegisterViewModel();
+class _SignInViewState extends State<SignInView> {
+  final SignInViewModel _viewModel = SignInViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class _RegisterViewState extends State<RegisterView> {
                     height: isLandscape ? screenHeight * 0.25 : screenHeight * 0.15,
                     width: isLandscape ? screenWidth * 0.3 : screenWidth * 0.3,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0), // Slightly rounded edges
+                      borderRadius: BorderRadius.circular(20.0),
                       border: Border.all(
                         color: Colors.blueGrey,
                         width: 2.0,
@@ -51,7 +51,7 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   SizedBox(height: screenHeight * 0.03),
                   Text(
-                    "Welcome Onboard!",
+                    "Welcome Back!",
                     style: TextStyle(
                       fontSize: isLandscape ? screenHeight * 0.05 : screenHeight * 0.03,
                       fontWeight: FontWeight.bold,
@@ -60,7 +60,7 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   Text(
-                    "Let's help you meet up your dream Home",
+                    "Sign in to your account",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.02,
@@ -74,11 +74,6 @@ class _RegisterViewState extends State<RegisterView> {
                       children: [
                         // Modernized Text Fields with Floating Labels
                         _buildModernTextField(
-                          controller: _viewModel.nameController,
-                          labelText: "Full Name",
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        _buildModernTextField(
                           controller: _viewModel.emailController,
                           labelText: "Email",
                         ),
@@ -86,12 +81,6 @@ class _RegisterViewState extends State<RegisterView> {
                         _buildModernTextField(
                           controller: _viewModel.passwordController,
                           labelText: "Password",
-                          isPassword: true,
-                        ),
-                        SizedBox(height: screenHeight * 0.02),
-                        _buildModernTextField(
-                          controller: _viewModel.confirmPasswordController,
-                          labelText: "Confirm Password",
                           isPassword: true,
                         ),
                         SizedBox(height: screenHeight * 0.04),
@@ -106,21 +95,15 @@ class _RegisterViewState extends State<RegisterView> {
                               ),
                             ),
                             onPressed: () async {
-                              String? result = await _viewModel.register();
-                              if (result != null) {
-                                // Show error message using a Snackbar
+                              String? errorMessage = await _viewModel.signIn();
+                              if (errorMessage != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(result)),
-                                );
-                              } else {
-                                // Optionally, show a success message
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Registration successful!')),
+                                  SnackBar(content: Text(errorMessage)),
                                 );
                               }
                             },
                             child: Text(
-                              "Register",
+                              "Sign In",
                               style: TextStyle(
                                 fontSize: isLandscape ? screenHeight * 0.05 : screenHeight * 0.025,
                                 color: Colors.white,
@@ -133,22 +116,22 @@ class _RegisterViewState extends State<RegisterView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Already have an account? ",
+                              "Don't have an account? ",
                               style: TextStyle(
                                 color: Colors.grey[600],
                                 fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.02,
                               ),
                             ),
-                              GestureDetector(
+                             GestureDetector(
                           onTap: () {
-                            // Navigate to SignInView when clicked
+                            // Navigate to RegisterView when clicked
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SignInView()),
+                              MaterialPageRoute(builder: (context) => RegisterView()),
                             );
                           },
                               child: Text(
-                                "Sign In",
+                                "Register",
                                 style: TextStyle(
                                   color: Colors.blue,
                                   fontWeight: FontWeight.bold,
@@ -191,7 +174,7 @@ class _RegisterViewState extends State<RegisterView> {
           borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(color: Colors.blue, width: 1.5),
         ),
-        floatingLabelBehavior: FloatingLabelBehavior.auto, // Floating label on focus or input
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
         contentPadding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
         labelStyle: TextStyle(
           color: Colors.grey[500],
