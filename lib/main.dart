@@ -20,9 +20,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DashboardScreen(), // Set OnboardingScreen as the home
+      home: const OnboardingScreen(), // Set OnboardingScreen as the home
       routes: {
-        '/signin': (context) => const SignInView(), // Define your HomePage here
+        '/signin': (context) => const SignInView(),
+        '/dashboard': (context) => const DashboardScreen() // Define your HomePage here
       },
     );
   }
