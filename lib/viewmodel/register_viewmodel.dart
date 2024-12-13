@@ -6,9 +6,9 @@ class RegisterViewModel {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
-  // Perform validation and registration logic
+  // Perform mock registration
   Future<String?> register() async {
-    // Validate name, email, password, and confirm password
+    // Validate inputs
     if (nameController.text.isEmpty ||
         emailController.text.isEmpty ||
         passwordController.text.isEmpty ||
@@ -24,17 +24,21 @@ class RegisterViewModel {
       return "Passwords do not match";
     }
 
-    // Simulate a network call or async operation (e.g., registration API)
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    // Simulate a network delay
+    await Future.delayed(const Duration(seconds: 2));
 
-    // If everything is valid, return null (or success message)
-    return null; // Return null for success
+    // Mock logic: failure for a specific email
+    if (emailController.text == "alreadyused@example.com") {
+      return "Email is already registered"; // Simulate failure for existing email
+    }
+
+    // Mock success
+    return null; // Success
   }
 
   // Email validation method
   bool _validateEmail(String email) {
-    String pattern =
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(email);
   }
