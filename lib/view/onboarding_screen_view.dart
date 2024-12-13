@@ -17,6 +17,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final paddingTop = MediaQuery.of(context).padding.top;
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
@@ -28,24 +29,28 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                vertical: isLandscape ? screenHeight * 0.05 : screenHeight * 0.02,
+                vertical: isLandscape ? screenHeight * 0.02 : screenHeight * 0.02,
+                horizontal: isLandscape ? screenWidth * 0.05 : 0,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Logo Container
-                  Container(
-                    height: isLandscape ? screenHeight * 0.25 : screenHeight * 0.15,
-                    width: screenWidth * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
-                        color: Colors.blueGrey,
-                        width: 2.0,
-                      ),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/images/logo.png'),
-                        fit: BoxFit.cover,
+                  Padding(
+                    padding: EdgeInsets.only(top: paddingTop + 6.0),
+                    child: Container(
+                      height: isLandscape ? screenHeight * 0.3 : screenHeight * 0.15,
+                      width: isLandscape ? screenWidth * 0.2 : screenWidth * 0.4,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(
+                          color: Colors.blueGrey,
+                          width: 2.0,
+                        ),
+                        image: const DecorationImage(
+                          image: AssetImage('assets/images/logo.png'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -54,28 +59,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   Text(
                     "Home is where the Heart is.",
                     style: TextStyle(
-                      fontSize: isLandscape ? screenHeight * 0.05 : screenHeight * 0.03,
+                      fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.03,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   // Subtitle
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.055),
                     child: Text(
                       "Looking for your nest birdie? You found the right place. Let us help!",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.02,
+                        fontSize: isLandscape ? screenHeight * 0.03 : screenHeight * 0.02,
                         color: Colors.grey[600],
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.03),
+                  SizedBox(height: screenHeight * 0.04),
                   // Onboarding Pages
                   SizedBox(
-                    height: screenHeight * 0.4, // Reduced to leave space for other elements
+                    height: isLandscape ? screenHeight * 0.8 : screenHeight * 0.48,
                     child: PageView(
                       controller: _controller,
                       onPageChanged: (index) {
@@ -98,10 +104,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     count: 5,
                     effect: const ExpandingDotsEffect(activeDotColor: Colors.blue),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.03),
                   // Navigation Button
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.2),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -126,7 +132,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: Text(
                         _currentPage == 4 ? "Get Started" : "Next",
                         style: TextStyle(
-                          fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.025,
+                          fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.02,
                           color: Colors.white,
                         ),
                       ),
@@ -145,11 +151,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Flexible(
+        ClipRRect(
+          borderRadius: BorderRadius.circular(16.0), // Curved corners
           child: Image.asset(
             imagePath,
+            width: double.infinity,
             height: 250,
-            fit: BoxFit.contain,
+            fit: BoxFit.cover, // Cover the entire width
           ),
         ),
         const SizedBox(height: 20),

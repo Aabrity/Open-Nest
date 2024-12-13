@@ -35,8 +35,8 @@ class _SignInViewState extends State<SignInView> {
                 children: [
                   // Logo with modernized style
                   Container(
-                    height: isLandscape ? screenHeight * 0.25 : screenHeight * 0.15,
-                    width: isLandscape ? screenWidth * 0.3 : screenWidth * 0.3,
+                    height: isLandscape ? screenHeight * 0.3 : screenHeight * 0.15,
+                    width: isLandscape ? screenWidth * 0.2 : screenWidth * 0.4,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20.0),
                       border: Border.all(
