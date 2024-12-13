@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_nest/view/dashboard_view.dart';
 import 'package:open_nest/view/onboarding_screen_view.dart';
 import 'package:open_nest/view/sign_in_view.dart';
 import 'view/register_view.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const OnboardingScreen(), // Set OnboardingScreen as the home
+      home: const DashboardScreen(), // Set OnboardingScreen as the home
       routes: {
         '/signin': (context) => const SignInView(), // Define your HomePage here
       },
