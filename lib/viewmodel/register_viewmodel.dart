@@ -39,5 +39,3 @@ class RegisterViewModel {
     return regExp.hasMatch(email);
   }
 }
-
-
