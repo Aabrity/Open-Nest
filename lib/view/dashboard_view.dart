@@ -1,310 +1,161 @@
 import 'package:flutter/material.dart';
+import 'package:open_nest/core/app_theme/app_theme.dart';
+import 'package:open_nest/view/add_screen.dart';
+import 'package:open_nest/view/home_screen.dart';
+import 'package:open_nest/view/profile_screen.dart';
+import 'package:open_nest/view/search_screen.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  _DashboardScreenState createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final ScrollController _scrollController = ScrollController();
+  int _selectedNavIndex = 0;
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const SearchScreen(),
+    const AddScreen(),
+    const ProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isLandscape = screenWidth > screenHeight;
+    final orientation = MediaQuery.of(context).orientation;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        toolbarHeight: screenHeight * 0.12,
-        title: Row(
-          children: [
-            CircleAvatar(
-              radius: screenHeight * 0.04,
-              backgroundImage: const AssetImage('assets/images/profile.png'),
-            ),
-            SizedBox(width: screenWidth * 0.03),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Welcome,',
-                  style: TextStyle(
-                    fontSize: screenHeight * 0.018,
-                    color: Colors.black54,
-                  ),
-                ),
-                Text(
-                  'Anamika',
-                  style: TextStyle(
-                    fontSize: screenHeight * 0.022,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-            const Spacer(),
-            IconButton(
-              icon: Icon(
-                Icons.notifications,
-                color: Colors.grey[700],
-                size: screenHeight * 0.035,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea( // Ensuring content doesn't get blocked in landscape view
-        child: SingleChildScrollView( // Make the body scrollable
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: screenHeight * 0.02),
-                Text(
-                  'Dashboard',
-                  style: TextStyle(
-                    fontSize: screenHeight * 0.03,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.02),
-                // Stat cards (now responsive)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildStatCard(
-                      ' 12',
-                      'Active Listings',
-                      const Color.fromARGB(255, 74, 57, 48),
-                      screenHeight,
-                      screenWidth,
-                      isLandscape
-                    ),
-                    _buildStatCard(
-                      ' 5.3k',
-                      'Total Likes',
-                      const Color.fromARGB(255, 74, 57, 48),
-                      screenHeight,
-                      screenWidth,
-                      isLandscape
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.03),
-                Text(
-                  'Quick Actions',
-                  style: TextStyle(
-                    fontSize: screenHeight * 0.025,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.02),
-                // Adjusting the grid based on orientation
-                GridView.count(
-                  physics: const NeverScrollableScrollPhysics(), // Disable grid scrolling
-                  shrinkWrap: true, // Allow the grid to take up only the space it needs
-                  crossAxisCount: isLandscape ? 4 : 2,  // 4 columns in landscape, 2 in portrait
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  children: [
-                    _buildActionTile(Icons.home, 'Browse Properties', const Color.fromARGB(255, 0, 0, 0), context, const BrowsePropertiesScreen(), isLandscape),
-                    _buildActionTile(Icons.add_business, 'Add Listings', const Color.fromARGB(255, 0, 0, 0), context, const AddListingsScreen(), isLandscape),
-                    _buildActionTile(Icons.edit, 'Manage Listings', const Color.fromARGB(255, 0, 0, 0), context, const ManageListingsScreen(), isLandscape),
-                    _buildActionTile(Icons.message, 'Messages', const Color.fromARGB(255, 0, 0, 0), context, const MessagesScreen(), isLandscape),
-                  ],
-                ),
-                // Adding padding to avoid the app bar blocking the content in landscape mode
-                SizedBox(height: isLandscape ? screenHeight * 0.25 : 0),
-              ],
-            ),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 10.0),
-        padding: const EdgeInsets.all(0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 0, 0, 0),
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Colors.transparent,
+    double fontSize = orientation == Orientation.portrait ? screenHeight * 0.018 : screenHeight * 0.05;
+    double iconSize = orientation == Orientation.portrait ? screenHeight * 0.03 : screenHeight * 0.06;
+
+    return MaterialApp(
+      theme: AppTheme.theme,
+      home: Scaffold(
+        backgroundColor: AppTheme.backgroundColor,
+        appBar: AppBar(
           elevation: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          backgroundColor: AppTheme.appBarBackgroundColor,
+          toolbarHeight: screenHeight * 0.12,
+          title: Row(
             children: [
-              _buildNavItem(Icons.home, "Home", true),
-              _buildNavItem(Icons.search, "Search", false),
-              _buildNavItem(Icons.add_circle_outline, "Add", false),
-              _buildNavItem(Icons.person, "Profile", false),
+              CircleAvatar(
+                radius: screenHeight * 0.04,
+                backgroundImage: const AssetImage('assets/images/profile.png'),
+              ),
+              SizedBox(width: screenWidth * 0.03),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Welcome,',
+                    style: TextStyle(
+                      fontSize: fontSize * 0.8,
+                      color: AppTheme.appBarTextColor,
+                    ),
+                  ),
+                  Text(
+                    'Anamika',
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textColor,
+                    ),
+                  ),
+                ],
+              ),
+              const Spacer(),
+              IconButton(
+                icon: Icon(
+                  Icons.notifications,
+                  color: AppTheme.notificationIconColor,
+                  size: iconSize,
+                ),
+                onPressed: () {},
+              ),
             ],
           ),
         ),
+        body: SafeArea(
+          child: IndexedStack(
+            index: _selectedNavIndex,
+            children: _screens,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 9.0),
+          padding: const EdgeInsets.all(0),
+          decoration: BoxDecoration(
+            color: AppTheme.secondaryColor,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.4),
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: BottomAppBar(
+            color: Colors.transparent,
+            elevation: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildNavItem(Icons.home, "Home", 0),
+                _buildNavItem(Icons.search, "Search", 1),
+                _buildNavItem(Icons.add_circle_outline, "Add", 2),
+                _buildNavItem(Icons.person, "Profile", 3),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _buildStatCard(String title, String value, Color color, double screenHeight, double screenWidth, bool isLandscape) {
-    double cardWidth = isLandscape ? screenWidth * 0.4 : screenWidth * 0.45;
-    return Container(
-      width: cardWidth,  // Adjust the width based on orientation
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: screenHeight * 0.02,
-              color: Colors.black54,
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.0),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: screenHeight * 0.025,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionTile(IconData icon, String label, Color color, BuildContext context, Widget destination, bool isLandscape) {
-    double cardWidth = isLandscape ? 150 : 200;  // Smaller width for landscape mode
+  Widget _buildNavItem(IconData icon, String label, int index) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => destination),
-        );
+        setState(() {
+          _selectedNavIndex = index;
+        });
       },
-      child: Container(
-        width: cardWidth,  // Adjust the width based on orientation
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.orange.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: const Offset(0, 4),
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              child: Icon(icon, size: 45, color: color),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, bool isSelected) {
-    return GestureDetector(
-      onTap: () {},
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             icon,
-            color: isSelected ? Colors.orange : Colors.white,
+            size: 28,
+            color: _selectedNavIndex == index
+                ? AppTheme.primaryColor
+                : AppTheme.appBarBackgroundColor,
           ),
           Text(
             label,
             style: TextStyle(
-              color: isSelected ? Colors.orange : Colors.white,
-              fontSize: 15,
+              fontSize: 12,
+              color: _selectedNavIndex == index
+                  ? AppTheme.primaryColor
+                  : AppTheme.appBarBackgroundColor,
             ),
           ),
+          if (_selectedNavIndex == index)
+            Container(
+              margin: const EdgeInsets.only(top: 4),
+              width: 6,
+              height: 6,
+              decoration: const BoxDecoration(
+                color: Colors.orange,
+                shape: BoxShape.circle,
+              ),
+            ),
         ],
       ),
-    );
-  }
-}
-
-class BrowsePropertiesScreen extends StatelessWidget {
-  const BrowsePropertiesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Browse Properties')),
-      body: const Center(child: Text('Browse Properties Page')),
-    );
-  }
-}
-
-class AddListingsScreen extends StatelessWidget {
-  const AddListingsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Add Listings')),
-      body: const Center(child: Text('Add Listings Page')),
-    );
-  }
-}
-
-class ManageListingsScreen extends StatelessWidget {
-  const ManageListingsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Manage Listings')),
-      body: const Center(child: Text('Manage Listings Page')),
-    );
-  }
-}
-
-class MessagesScreen extends StatelessWidget {
-  const MessagesScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Messages')),
-      body: const Center(child: Text('Messages Page')),
     );
   }
 }

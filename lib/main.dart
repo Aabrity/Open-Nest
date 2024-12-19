@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_nest/core/app_theme/app_theme.dart';
 import 'package:open_nest/view/dashboard_view.dart';
 import 'package:open_nest/view/onboarding_screen_view.dart';
 import 'package:open_nest/view/sign_in_view.dart';
@@ -17,10 +18,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Real Estate App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const OnboardingScreen(), // Set OnboardingScreen as the home
+      theme: AppTheme.theme,
+     
+      home: const DashboardScreen(), // Set OnboardingScreen as the home
       routes: {
         '/signin': (context) => const SignInView(),
         '/dashboard': (context) => const DashboardScreen() // Define your HomePage here
