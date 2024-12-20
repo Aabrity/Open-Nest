@@ -52,6 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                     'Welcome,',
                     style: TextStyle(
+                      // fontFamily: 'Montserrat Bold Italic',
                       fontSize: fontSize * 0.8,
                       color: AppTheme.appBarTextColor,
                     ),
@@ -59,6 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                     'Anamika',
                     style: TextStyle(
+                      // fontFamily: 'Montserrat Bold Italic',
                       fontSize: fontSize,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.textColor,

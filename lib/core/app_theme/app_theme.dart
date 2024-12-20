@@ -18,21 +18,36 @@ class AppTheme {
     return ThemeData(
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
+      fontFamily: 'Montserrat Bold', 
       appBarTheme: const AppBarTheme(
         backgroundColor: appBarBackgroundColor,
         titleTextStyle: TextStyle(
+          fontFamily: 'Montserrat Bold',
           color: appBarTextColor,
           fontWeight: FontWeight.bold,
+          fontSize: 20,
         ),
       ),
       textTheme: const TextTheme(
         headlineSmall: TextStyle(
-          fontSize: 18,
+          fontFamily: 'Montserrat Italic',
+          fontSize: 16,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
         bodyLarge: TextStyle(
-          fontSize: 16,
+          fontFamily: 'Montserrat Itallic ',
+          fontSize: 15,
+          color: textSecondaryColor,
+        ),
+        bodyMedium: TextStyle(
+          fontFamily: 'Montserrat Italic',
+          fontSize: 13,
+          color: textColor,
+        ),
+        bodySmall: TextStyle(
+          fontFamily: 'Montserrat Italic',
+          fontSize: 12,
           color: textSecondaryColor,
         ),
       ),

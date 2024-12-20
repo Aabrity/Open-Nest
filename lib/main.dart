@@ -20,10 +20,10 @@ class MyApp extends StatelessWidget {
       title: 'Real Estate App',
       theme: AppTheme.theme,
      
-      home: const DashboardScreen(), // Set OnboardingScreen as the home
+      home: const DashboardScreen(), 
       routes: {
         '/signin': (context) => const SignInView(),
-        '/dashboard': (context) => const DashboardScreen() // Define your HomePage here
+        '/dashboard': (context) => const DashboardScreen() 
       },
     );
   }

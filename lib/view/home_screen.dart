@@ -216,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: screenHeight * 0.01),
             LayoutBuilder(
               builder: (context, constraints) {
-                double fontSizeTitle = screenHeight * 0.018;
+                double fontSizeTitle = screenHeight * 0.016;
                 double fontSizePrice = screenHeight * 0.016;
                 if (screenWidth > screenHeight) {
                   fontSizeTitle = screenHeight * 0.035;
