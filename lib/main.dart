@@ -1,40 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:open_nest/core/app_theme/app_theme.dart';
-import 'package:open_nest/view/dashboard_view.dart';
-import 'package:open_nest/view/onboarding_screen_view.dart';
-import 'package:open_nest/view/sign_in_view.dart';
-import 'view/register_view.dart';
-import 'viewmodel/register_viewmodel.dart';
+import 'package:open_nest/app/app.dart';
+import 'package:open_nest/app/di/di.dart';
+import 'package:open_nest/core/network/hive_service.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize Hive Database
+  await HiveService.init();
 
+  // Delete all the hive data and boxes
+  // await HiveService().clearAll();
+  // Initialize Dependencies
+  await initDependencies();
 
-
-void main() {
-  runApp(MyApp());
+  runApp(
+    App(),
+  );
 }
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Real Estate App',
-      theme: AppTheme.theme,
-     
-      home: const DashboardScreen(), 
-      routes: {
-        '/signin': (context) => const SignInView(),
-        '/dashboard': (context) => const DashboardScreen() 
-      },
-    );
-  }
-}
-
-// class HomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text("Home Page")),
-//       body: Center(child: Text("Welcome to Real Estate App!")),
-//     );
-//   }
-// }
