@@ -41,11 +41,11 @@ class _RegisterViewState extends State<RegisterView> {
                     height: isLandscape ? screenHeight * 0.25 : screenHeight * 0.1,
                     width: isLandscape ? screenWidth * 0.15 : screenWidth * 0.3,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      border: Border.all(
+                      
+                     
                         color: Colors.blueGrey,
-                        width: 2.0,
-                      ),
+                        
+                      
                       image: const DecorationImage(
                         image: AssetImage('assets/images/logo.png'),
                         fit: BoxFit.cover,

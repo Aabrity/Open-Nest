@@ -20,7 +20,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Center(
@@ -30,7 +30,7 @@ class _SplashViewState extends State<SplashView> {
                 SizedBox(
                   height: 200,
                   width: 200,
-                  child: Image.asset('assets/images/logo2.png'),
+                  child: Image.asset('assets/images/logo.png'),
                 ),
                 const Text(
                   'RealEsate Listings',
@@ -41,7 +41,7 @@ class _SplashViewState extends State<SplashView> {
                 const SizedBox(height: 10),
                 const CircularProgressIndicator(),
                 const SizedBox(height: 10),
-                const Text('version : 1.0.0')
+                const Text('APP VERSION 1.0')
               ],
             ),
           ),

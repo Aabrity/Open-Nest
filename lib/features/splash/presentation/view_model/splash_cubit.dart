@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_nest/features/auth/presentation/view/login_view.dart';
 import 'package:open_nest/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:open_nest/features/onboarding/presentation/view/onboarding_view.dart';
 
 
 class SplashCubit extends Cubit<void> {
@@ -19,7 +20,7 @@ class SplashCubit extends Cubit<void> {
           MaterialPageRoute(
             builder: (context) => BlocProvider.value(
               value: _loginBloc,
-              child: LoginView(),
+              child: OnboardingScreen(loginBloc: _loginBloc,),
             ),
           ),
         );

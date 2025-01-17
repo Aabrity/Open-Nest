@@ -230,7 +230,7 @@ class HomeScreen extends StatelessWidget {
             SizedBox(height: screenHeight * 0.01),
             LayoutBuilder(
               builder: (context, constraints) {
-                double fontSizeTitle = screenHeight * 0.015;
+                double fontSizeTitle = screenHeight * 0.018;
                 double fontSizePrice = screenHeight * 0.016;
                 if (screenWidth > screenHeight) {
                   fontSizeTitle = screenHeight * 0.035;
@@ -311,6 +311,7 @@ class _CategoryLink extends StatelessWidget {
             style: TextStyle(
               color: isActive ? Colors.orange : AppTheme.textColor,
               fontWeight: isActive ? FontWeight.w800 : FontWeight.w900,
+            
             ),
           ),
           if (isActive)

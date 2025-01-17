@@ -18,11 +18,11 @@ class AppTheme {
     return ThemeData(
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
-      fontFamily: 'Montserrat Bold', 
+      fontFamily: 'oswald bold',
       appBarTheme: const AppBarTheme(
         backgroundColor: appBarBackgroundColor,
         titleTextStyle: TextStyle(
-          fontFamily: 'Montserrat Bold',
+          fontFamily: 'oswald bold',
           color: appBarTextColor,
           fontWeight: FontWeight.bold,
           fontSize: 20,
@@ -30,24 +30,24 @@ class AppTheme {
       ),
       textTheme: const TextTheme(
         headlineSmall: TextStyle(
-          fontFamily: 'Montserrat Italic',
+          fontFamily: 'oswald bold',
           fontSize: 16,
           fontWeight: FontWeight.bold,
           color: textColor,
         ),
         bodyLarge: TextStyle(
-          fontFamily: 'Montserrat Itallic ',
+          fontFamily: 'oswald regular',
           fontSize: 15,
           color: textSecondaryColor,
         ),
         bodyMedium: TextStyle(
-          fontFamily: 'Montserrat Italic',
-          fontSize: 13,
+          fontFamily: 'oswald regular',
+          fontSize: 14,
           color: textColor,
         ),
         bodySmall: TextStyle(
-          fontFamily: 'Montserrat Italic',
-          fontSize: 12,
+          fontFamily: 'oswald light',
+          fontSize: 13,
           color: textSecondaryColor,
         ),
       ),

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_nest/app/di/di.dart';
 import 'package:open_nest/core/theme/app_theme.dart';
-import 'package:open_nest/features/onboarding/presentation/view/onboarding_view.dart';
-import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_bloc.dart';
 import 'package:open_nest/features/splash/presentation/view/splash_view.dart';
 import 'package:open_nest/features/splash/presentation/view_model/splash_cubit.dart';
 

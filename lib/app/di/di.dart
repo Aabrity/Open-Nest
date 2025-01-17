@@ -7,7 +7,8 @@ import 'package:open_nest/features/auth/domain/use_case/register_user_usecase.da
 import 'package:open_nest/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:open_nest/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_cubit.dart';
-import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_bloc.dart';
+import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_cubit.dart';
+// import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_bloc.dart';
 import 'package:open_nest/features/splash/presentation/view_model/splash_cubit.dart';
 
 final getIt = GetIt.instance;
@@ -80,8 +81,9 @@ _initSplashScreenDependencies() async {
 
 
 _initonboardScreenDependencies() {
-  getIt.registerFactory(() => OnboardingBloc());
-  
+  getIt.registerFactory<OnboardingCubit>(
+    () => OnboardingCubit(getIt<LoginBloc>()),
+  );
 }
 
 

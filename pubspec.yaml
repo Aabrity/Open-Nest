@@ -103,9 +103,18 @@ flutter:
       fonts:
         - asset: assets\fonts\MontserratAlternates-Italic.ttf
 
-    - family: Montserrat Italic
+    - family: oswald bold
       fonts:
-        - asset: assets\fonts\MontserratAlternates-Italic.ttf
+        - asset: assets\fonts\Oswald-Bold.ttf
+
+    - family: Oswald regular
+      fonts:
+        - asset: assets\fonts\Oswald-Regular.ttf
+
+    - family: oswald light
+      fonts:
+        - asset: assets\fonts\Oswald-Light.ttf
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
