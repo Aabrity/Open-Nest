@@ -284,7 +284,7 @@ class _CategoryLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+        // final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
         double offset = 0.0;
         if (index == 0) {
           offset = 80; // Start at Sale

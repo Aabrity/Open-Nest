@@ -5,7 +5,6 @@ import 'onboarding_state.dart';
 class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   OnboardingBloc() : super(OnboardingInitial());
 
-  @override
   Stream<OnboardingState> mapEventToState(OnboardingEvent event) async* {
     if (event is OnboardingPageChanged) {
       yield OnboardingPageState(event.pageIndex);
