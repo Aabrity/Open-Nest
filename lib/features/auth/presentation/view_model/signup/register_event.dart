@@ -20,7 +20,7 @@ class RegisterUserEvent extends RegisterEvent {
   final String username;
   final String email;
   final String password;
-  final String? image;
+  final String? avatar;
 
 
   const RegisterUserEvent({
@@ -28,6 +28,6 @@ class RegisterUserEvent extends RegisterEvent {
     required this.username,
     required this.email,
     required this.password,
-    this.image,
+    this.avatar,
   });
 }

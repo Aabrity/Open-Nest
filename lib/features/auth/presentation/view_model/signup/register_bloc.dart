@@ -40,7 +40,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       username: event.username,
       email: event.email,
       password: event.password, 
-      image: state.imageName,
+      avatar: state.avatarName,
       
     ));
 
@@ -107,7 +107,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     result.fold(
       (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
       (r) {
-        emit(state.copyWith(isLoading: false, isSuccess: true, imageName: r));
+        emit(state.copyWith(isLoading: false, isSuccess: true, avatarName: r));
       },
     );
   }
