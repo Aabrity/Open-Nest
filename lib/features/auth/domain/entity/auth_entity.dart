@@ -16,7 +16,7 @@ class AuthEntity extends Equatable {
     required this.password,
     this.avatar,
     this.isAdmin = false,
-    this.subscription = false,
+    this.subscription = false, String? image,
   });
 
 
