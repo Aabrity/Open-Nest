@@ -237,14 +237,14 @@ class _RegisterViewState extends State<RegisterView> {
                         if (_key.currentState!.validate()) {
                           final registerState =
                               context.read<RegisterBloc>().state;
-                          final imageName = registerState.imageName;
+                          final avatarName = registerState.avatarName;
                           context.read<RegisterBloc>().add(
                                 RegisterUserEvent(
                                   context: context,
                                   username: _usernameController.text,
                                   password: _passwordController.text,
                                   email: _emailController.text,
-                                  image: imageName,
+                                  avatar: avatarName,
                                 ),
                               );
                         }
