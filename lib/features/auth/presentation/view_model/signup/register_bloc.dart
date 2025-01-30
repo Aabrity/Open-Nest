@@ -39,8 +39,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     final result = await _registerUseCase.call(RegisterUserParams(
       username: event.username,
       email: event.email,
-      password: event.password,
-      avatar: state.avatarName,
+      password: event.password, 
+      image: state.imageName,
+      
     ));
 
     result.fold(
@@ -87,6 +88,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
       (r) {
         emit(state.copyWith(isLoading: false, isSuccess: true, avatarName: r));
+      },
+    );
+  }
+
+
+  void _onLoadImage(
+    UploadImage event,
+    Emitter<RegisterState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+    final result = await _uploadImageUsecase.call(
+      UploadImageParams(
+        file: event.file,
+      ),
+    );
+
+    result.fold(
+      (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
+      (r) {
+        emit(state.copyWith(isLoading: false, isSuccess: true, imageName: r));
       },
     );
   }

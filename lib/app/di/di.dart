@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:open_nest/app/shared_prefs/token_shared_prefs.dart';
 import 'package:open_nest/core/network/api_service.dart';
 import 'package:open_nest/core/network/hive_service.dart';
 import 'package:open_nest/features/auth/data/data_source/local_data_source/auth_local_datasource.dart';
@@ -19,13 +18,16 @@ import '../../features/auth/data/data_source/remote_data_source/auth_remote_data
 import '../../features/auth/data/repository/auth_local_repository/auth_remote_repository.dart';
 import '../../features/auth/domain/use_case/upload_image_usecase.dart';
 
+import '../../features/auth/data/data_source/remote_data_source/auth_remote_data_source.dart';
+import '../../features/auth/data/repository/auth_local_repository/auth_remote_repository.dart';
+import '../../features/auth/domain/use_case/upload_image_usecase.dart';
+
 final getIt = GetIt.instance;
 
 Future<void> initDependencies() async {
   // Initialize Hive service
   await _initHiveService();
   await _initApiService();
-  await _initSharedPreferences();
 
   // Initialize Register and Login Dependencies
   await _initRegisterDependencies();
@@ -95,9 +97,7 @@ _initLoginDependencies() async {
 
   // Initialize Login UseCase
   getIt.registerLazySingleton<LoginUseCase>(
-    () => LoginUseCase(getIt<AuthRemoteRepository>(),
-     getIt<TokenSharedPrefs>(),
-    ),
+    () => LoginUseCase(getIt<AuthRemoteRepository>()),
   );
 
   // Register Login Bloc

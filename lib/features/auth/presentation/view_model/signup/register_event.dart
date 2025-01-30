@@ -9,7 +9,6 @@ sealed class RegisterEvent extends Equatable {
 
 class UploadImage extends RegisterEvent {
   final File file;
-  
 
   const UploadImage({
     required this.file,
@@ -21,7 +20,7 @@ class RegisterUserEvent extends RegisterEvent {
   final String username;
   final String email;
   final String password;
-  final String? avatar;
+  final String? image;
 
 
   const RegisterUserEvent({
@@ -29,6 +28,6 @@ class RegisterUserEvent extends RegisterEvent {
     required this.username,
     required this.email,
     required this.password,
-    this.avatar,
+    this.image,
   });
 }
