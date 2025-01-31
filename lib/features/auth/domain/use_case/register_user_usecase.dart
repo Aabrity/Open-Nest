@@ -28,8 +28,8 @@ class RegisterUserParams extends Equatable {
         required this.username,
         required this.email,
         required this.password,
-        required this.isAdmin,
-        required this.subscription,
+        this.isAdmin=false,
+        this.subscription = false,
         this.avatar,
   });
   @override
