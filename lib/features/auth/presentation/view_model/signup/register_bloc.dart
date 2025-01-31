@@ -39,32 +39,49 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     final result = await _registerUseCase.call(RegisterUserParams(
       username: event.username,
       email: event.email,
-      password: event.password, 
+      password: event.password,
       avatar: state.avatarName,
-      
     ));
 
     result.fold(
-      (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
-      (r) {
+      (l) { 
+        emit(state.copyWith(isLoading: false, isSuccess: false));
+        if (l.message == "Exception: Exception: Created") {
+          showMySnackBar(
+            context: event.context,
+            message: "Registration Successful",
+          );
+        } else {
+          showMySnackBar(
+            context: event.context,
+            message: l.message,
+            color: Colors.red,
+          );
+        }
+      },
+      (r) { 
         emit(state.copyWith(isLoading: false, isSuccess: true));
         showMySnackBar(
-            context: event.context, message: "Registration Successful");
+          context: event.context,
+          message: "Registration Successful",
+        );
       },
     );
   }
 
 
+
+
+
   void _onLoadImage(
-    UploadImage event,
-    Emitter<RegisterState> emit,
-  ) async {
-    emit(state.copyWith(isLoading: true));
-    final result = await _uploadImageUsecase.call(
-      UploadImageParams(
-        file: event.file,
-      ),
-    );
+  UploadImage event,
+  Emitter<RegisterState> emit,
+) async {
+  emit(state.copyWith(isLoading: true));
+
+  final result = await _uploadImageUsecase.call(
+    UploadImageParams(file: event.file),
+  );
 
     result.fold(
       (l) => emit(state.copyWith(isLoading: false, isSuccess: false)),
