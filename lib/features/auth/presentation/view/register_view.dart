@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:open_nest/features/auth/presentation/view_model/signup/register_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -14,16 +18,47 @@ class _RegisterViewState extends State<RegisterView> {
   final _key = GlobalKey<FormState>();
   final _usernameController = TextEditingController(text: 'user');
   final _passwordController = TextEditingController(text: 'user123');
-  final _confirmPasswordController = TextEditingController(); // For password confirmation
+  final _confirmPasswordController =
+      TextEditingController(); // For password confirmation
   final _emailController = TextEditingController(text: 'email');
+
+  // Check for camera permission
+  Future<void> checkCameraPermission() async {
+    if (await Permission.camera.request().isRestricted ||
+        await Permission.camera.request().isDenied) {
+      await Permission.camera.request();
+    }
+  }
+
+  File? _img;
+  Future _browseImage(ImageSource imageSource) async {
+    try {
+      final image = await ImagePicker().pickImage(source: imageSource);
+      if (image != null) {
+        setState(() {
+          _img = File(image.path);
+          // Send image to server
+          context.read<RegisterBloc>().add(
+                UploadImage(file: _img!),
+              );
+        });
+      } else {
+        return;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
-    return Scaffold(
+  return  
+    Scaffold(
       appBar: AppBar(
         title: const Text('SIGN UP'),
         centerTitle: true,
@@ -37,15 +72,12 @@ class _RegisterViewState extends State<RegisterView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                   Container(
-                    height: isLandscape ? screenHeight * 0.25 : screenHeight * 0.1,
+                  Container(
+                    height:
+                        isLandscape ? screenHeight * 0.25 : screenHeight * 0.1,
                     width: isLandscape ? screenWidth * 0.15 : screenWidth * 0.3,
                     decoration: BoxDecoration(
-                      
-                     
-                        color: Colors.blueGrey,
-                        
-                      
+                      color: Colors.blueGrey,
                       image: const DecorationImage(
                         image: AssetImage('assets/images/logo.png'),
                         fit: BoxFit.cover,
@@ -56,7 +88,9 @@ class _RegisterViewState extends State<RegisterView> {
                   Text(
                     "Welcome!",
                     style: TextStyle(
-                      fontSize: isLandscape ? screenHeight * 0.04 : screenHeight * 0.025,
+                      fontSize: isLandscape
+                          ? screenHeight * 0.04
+                          : screenHeight * 0.025,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -66,7 +100,9 @@ class _RegisterViewState extends State<RegisterView> {
                     "Let's take the first step, Create an account.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isLandscape ? screenHeight * 0.03 : screenHeight * 0.017,
+                      fontSize: isLandscape
+                          ? screenHeight * 0.03
+                          : screenHeight * 0.017,
                       color: Colors.grey[600],
                     ),
                   ),
@@ -89,6 +125,8 @@ class _RegisterViewState extends State<RegisterView> {
                             children: [
                               ElevatedButton.icon(
                                 onPressed: () {
+                                  checkCameraPermission();
+                                  _browseImage(ImageSource.camera);
                                   Navigator.pop(context);
                                   // Implement image picking functionality here
                                 },
@@ -97,8 +135,9 @@ class _RegisterViewState extends State<RegisterView> {
                               ),
                               ElevatedButton.icon(
                                 onPressed: () {
-                                  Navigator.pop(context);
                                   // Implement image picking from gallery here
+                                  _browseImage(ImageSource.gallery);
+                                  Navigator.pop(context);
                                 },
                                 icon: const Icon(Icons.image),
                                 label: const Text('Gallery'),
@@ -111,10 +150,12 @@ class _RegisterViewState extends State<RegisterView> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 60,
-                          backgroundImage:
-                              AssetImage('assets/images/profile.png'),
+                          backgroundImage: _img != null
+                              ? FileImage(_img!)
+                              : const AssetImage('assets/images/profile.png')
+                                  as ImageProvider,
                         ),
                         Container(
                           height: 120,
@@ -194,20 +235,25 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       onPressed: () {
                         if (_key.currentState!.validate()) {
+                          final registerState =
+                              context.read<RegisterBloc>().state;
+                          final avatarName = registerState.avatarName;
                           context.read<RegisterBloc>().add(
                                 RegisterUserEvent(
                                   context: context,
                                   username: _usernameController.text,
                                   password: _passwordController.text,
                                   email: _emailController.text,
+                                  avatar: avatarName,
                                 ),
                               );
                         }
                       },
-                      child: const Text('Register',
-                       style: TextStyle(
-                                color: Colors.white,
-                              ),
+                      child: const Text(
+                        'Register',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -218,7 +264,10 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+    
   }
+  
+
 
   Widget _buildTextField({
     required TextEditingController controller,
@@ -234,7 +283,8 @@ class _RegisterViewState extends State<RegisterView> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       ),
       validator: validator,
     );

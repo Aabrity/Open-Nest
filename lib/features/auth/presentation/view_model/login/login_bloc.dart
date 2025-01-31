@@ -68,7 +68,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             emit(state.copyWith(isLoading: false, isSuccess: false));
             showMySnackBar(
               context: event.context,
-              message: "Invalid Credentials",
+              message: failure.message,
+>>>>>>> 67b5966 (file updating for merge clean archi)
               color: Colors.red,
             );
           },
