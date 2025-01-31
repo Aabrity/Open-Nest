@@ -69,7 +69,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             showMySnackBar(
               context: event.context,
               message: failure.message,
->>>>>>> 67b5966 (file updating for merge clean archi)
               color: Colors.red,
             );
           },
