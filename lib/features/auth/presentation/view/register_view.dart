@@ -57,7 +57,8 @@ class _RegisterViewState extends State<RegisterView> {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
-    return Scaffold(
+  return  
+    Scaffold(
       appBar: AppBar(
         title: const Text('SIGN UP'),
         centerTitle: true,
@@ -263,7 +264,10 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+    
   }
+  
+
 
   Widget _buildTextField({
     required TextEditingController controller,
