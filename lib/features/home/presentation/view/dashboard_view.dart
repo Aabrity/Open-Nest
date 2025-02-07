@@ -1,16 +1,27 @@
+// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:get_it/get_it.dart';
 import 'package:open_nest/core/theme/app_theme.dart';
 import 'package:open_nest/features/home/presentation/view/bottom_view/account_view.dart';
+// import 'package:open_nest/features/home/presentation/view/bottom_view/account_view.dart';
 import 'package:open_nest/features/home/presentation/view/bottom_view/add_view.dart';
 import 'package:open_nest/features/home/presentation/view/bottom_view/home_view.dart';
 import 'package:open_nest/features/home/presentation/view/bottom_view/search_view.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_cubit.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_state.dart';
+// import 'package:open_nest/features/profile/data/data_source/remote_data_source/profile_remote_data_source.dart';
+// import 'package:open_nest/features/profile/data/data_source/remote_data_source/profile_remote_data_source.dart';
+// import 'package:open_nest/features/profile/presentation/view_model/profile_state.dart';
+
+// import '../../../profile/presentation/view/profile_view.dart.dart';
+// import '../../../profile/presentation/view_model/profile_bloc.dart';
 
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +86,12 @@ class DashboardView extends StatelessWidget {
           builder: (context, state) {
             return IndexedStack(
               index: state.selectedNavIndex,
-              children: const [
-                HomeScreen(),
-                SearchView(),
-                AddView(),
-                AccountView(),
+              children: [
+                const HomeScreen(),
+                const SearchView(),
+                const AddView(),
+                const ProfileView(),
+               
               ],
             );
           },
@@ -122,6 +134,8 @@ class DashboardView extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.read<DashboardCubit>().selectNavIndex(index);
+         if (index == 3) {
+          context.read<DashboardCubit>().navigateToProfile();}
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,

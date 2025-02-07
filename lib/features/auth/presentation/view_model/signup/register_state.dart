@@ -2,18 +2,18 @@ part of 'register_bloc.dart';
 class RegisterState extends Equatable {
   final bool isLoading;
   final bool isSuccess;
-  final String? avatarName;
+  final String avatarName;
 
   const RegisterState({
     required this.isLoading,
     required this.isSuccess,
-    this.avatarName,
+    required this.avatarName,
   });
 
   const RegisterState.initial()
       : isLoading = false,
         isSuccess = false,
-        avatarName = null;
+        avatarName = '';
 
   RegisterState copyWith({
     bool? isLoading,
