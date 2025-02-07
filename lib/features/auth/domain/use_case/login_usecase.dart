@@ -32,7 +32,7 @@ class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
   LoginUseCase(this.repository, this.tokenSharedPrefs);
 
   @override
-  Future<Either<Failure, String>> call(LoginParams params) {
+  Future<Either<Failure, String>> call(LoginParams params) async {
     // Save token in Shared Preferences
     return repository
         .loginUser(params.username, params.password)
@@ -48,6 +48,23 @@ class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
         },
       );
     });
+  //  Future<Either<Failure, String>> call(LoginParams params) async {
+  //   // Perform login
+  //   final result = await repository.loginUser(params.username, params.password);
+    
+  //   return result.fold(
+  //     (failure) => Left(failure), // Return failure if login fails
+  //     (token) async {
+  //       // Save token in Shared Preferences
+  //       await tokenSharedPrefs.saveToken(token);
+        
+  //       // Retrieve token from Shared Preferences to confirm it
+  //       final savedToken = await tokenSharedPrefs.getToken();
+  //       print(savedToken); // For debugging purposes
+        
+  //       return Right(savedToken);
+  //       },
+  //   );
     
   }
 }

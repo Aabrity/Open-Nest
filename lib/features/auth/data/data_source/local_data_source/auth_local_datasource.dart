@@ -18,8 +18,7 @@ class AuthLocalDataSource implements IAuthDataSource {
         username: "",
         email: "",
         password: "",
-        avatar:
-            null,
+        avatar:"",
         isAdmin: false,
         subscription: false,
     ));
@@ -41,7 +40,7 @@ class AuthLocalDataSource implements IAuthDataSource {
       // Convert AuthEntity to AuthHiveModel
       final authHiveModel = AuthHiveModel.fromEntity(user);
 
-      await _hiveService.register(authHiveModel);
+      await _hiveService.registerAuth(authHiveModel);
       return Future.value();
     } catch (e) {
       return Future.error(e);

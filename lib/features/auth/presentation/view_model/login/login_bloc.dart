@@ -7,6 +7,7 @@ import 'package:open_nest/features/auth/presentation/view_model/signup/register_
 import 'package:open_nest/features/home/presentation/view/dashboard_view.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_cubit.dart';
 
+
 part 'login_event.dart';
 part 'login_state.dart';
 
@@ -77,7 +78,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             add(
               NavigateHomeScreenEvent(
                 context: event.context,
-                destination: const DashboardView(),
+                destination: DashboardView(),
               ),
             );
             //_homeCubit.setToken(token);
