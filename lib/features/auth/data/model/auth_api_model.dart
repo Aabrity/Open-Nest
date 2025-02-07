@@ -11,7 +11,7 @@ class AuthApiModel extends Equatable {
   final String username;
   final String email;
   final String? password;
-  final String? avatar;
+  final String avatar;
   final bool isAdmin;
   final bool subscription;
 

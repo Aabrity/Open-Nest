@@ -5,7 +5,7 @@ class AuthEntity extends Equatable {
   final String username;
   final String email;
   final String password;
-  final String? avatar;
+  final String avatar;
   final bool isAdmin;
   final bool subscription;
 
@@ -14,10 +14,19 @@ class AuthEntity extends Equatable {
     required this.username,
     required this.email,
     required this.password,
-    this.avatar,
+    required this.avatar,
     this.isAdmin = false,
     this.subscription = false, String? image,
   });
+
+    const AuthEntity.empty()
+      : userId = '',
+        username = '',
+        email = '',
+        avatar = '',
+        isAdmin = false,
+        subscription = false,
+        password = '';
 
 
 

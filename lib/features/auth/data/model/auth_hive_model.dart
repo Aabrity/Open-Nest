@@ -22,7 +22,7 @@ class AuthHiveModel extends Equatable {
   final String password;
 
   @HiveField(4)
-  final String? avatar;
+  final String avatar;
 
   @HiveField(5)
   final bool isAdmin;
@@ -35,7 +35,7 @@ class AuthHiveModel extends Equatable {
     required this.username,
     required this.email,
     required this.password,
-    this.avatar,
+    required this.avatar,
     this.isAdmin = false,
     this.subscription = false,
   }) : userId = userId ?? const Uuid().v4();

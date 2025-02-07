@@ -12,7 +12,7 @@ class RegisterUserParams extends Equatable {
   final String password;
   final bool isAdmin;
   final bool subscription;
-  final String? avatar;
+  final String avatar;
 
   const RegisterUserParams( {
     required this.username,
@@ -20,7 +20,7 @@ class RegisterUserParams extends Equatable {
     required this.password,
     this.isAdmin = false,
     this.subscription = false,
-    this.avatar,
+    required this.avatar,
   });
 
     // Initial Constructor
@@ -30,7 +30,7 @@ class RegisterUserParams extends Equatable {
         required this.password,
         this.isAdmin=false,
         this.subscription = false,
-        this.avatar,
+        required this.avatar,
   });
   @override
   List<Object?> get props => [username, email, password, isAdmin, subscription, avatar];
