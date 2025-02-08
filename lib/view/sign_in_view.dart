@@ -95,7 +95,7 @@ class _SignInViewState extends State<SignInView> {
                               ),
                             ),
                             onPressed: () async {
-                              String? errorMessage = await _viewModel.signIn();
+                              String? errorMessage = await _viewModel.signIn(context);
                               if (errorMessage != null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text(errorMessage)),
@@ -123,13 +123,13 @@ class _SignInViewState extends State<SignInView> {
                               ),
                             ),
                              GestureDetector(
-                          onTap: () {
-                            // Navigate to RegisterView when clicked
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => RegisterView()),
-                            );
-                          },
+                              onTap: () {
+                                // Navigate to RegisterView when clicked
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const RegisterView()),
+                                );
+                              },
                               child: Text(
                                 "Register",
                                 style: TextStyle(

@@ -4,9 +4,9 @@ class SignInViewModel {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  // Perform validation and sign-in logic
-  Future<String?> signIn() async {
-    // Validate email and password
+  // Perform sign-in logic and navigate on success
+  Future<String?> signIn(BuildContext context) async {
+    // Validate inputs
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       return "Please fill in all fields";
     }
@@ -15,17 +15,26 @@ class SignInViewModel {
       return "Invalid email format";
     }
 
-    // Simulate a network call or async operation (e.g., sign-in API)
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+    // Simulate a network delay
+    await Future.delayed(const Duration(seconds: 2));
 
-    // If everything is valid, return null (or success message)
-    return null; // Return null for success
+    // Mock logic: success for specific email/password
+    if (emailController.text == "Anamika@example.com" &&
+        passwordController.text == "password123") {
+      // Ensure the widget is still mounted before navigating
+      if (context.mounted) {
+        // Navigate to the Dashboard on success
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      }
+      return null; // Success
+    } else {
+      return "Invalid email or password"; // Failure
+    }
   }
 
   // Email validation method
   bool _validateEmail(String email) {
-    String pattern =
-        r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    String pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(email);
   }
