@@ -1,27 +1,12 @@
-// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:get_it/get_it.dart';
 import 'package:open_nest/core/theme/app_theme.dart';
-import 'package:open_nest/features/home/presentation/view/bottom_view/account_view.dart';
-// import 'package:open_nest/features/home/presentation/view/bottom_view/account_view.dart';
-import 'package:open_nest/features/home/presentation/view/bottom_view/add_view.dart';
-import 'package:open_nest/features/home/presentation/view/bottom_view/home_view.dart';
-import 'package:open_nest/features/home/presentation/view/bottom_view/search_view.dart';
+import 'package:open_nest/core/common/snackbar/my_snackbar.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_cubit.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_state.dart';
-// import 'package:open_nest/features/profile/data/data_source/remote_data_source/profile_remote_data_source.dart';
-// import 'package:open_nest/features/profile/data/data_source/remote_data_source/profile_remote_data_source.dart';
-// import 'package:open_nest/features/profile/presentation/view_model/profile_state.dart';
-
-// import '../../../profile/presentation/view/profile_view.dart.dart';
-// import '../../../profile/presentation/view_model/profile_bloc.dart';
-
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -36,106 +21,115 @@ class DashboardView extends StatelessWidget {
         ? screenHeight * 0.03
         : screenHeight * 0.06;
 
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppTheme.appBarBackgroundColor,
-        toolbarHeight: screenHeight * 0.12,
-        title: Row(
-          children: [
-            CircleAvatar(
-              radius: screenHeight * 0.04,
-              backgroundImage: const AssetImage('assets/images/profile.png'),
-            ),
-            SizedBox(width: screenWidth * 0.03),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<DashboardCubit, DashboardState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppTheme.backgroundColor,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: AppTheme.appBarBackgroundColor,
+            toolbarHeight: screenHeight * 0.12,
+            title: Row(
               children: [
-                Text(
-                  'Welcome,',
-                  style: TextStyle(
-                    fontSize: fontSize * 0.8,
-                    color: AppTheme.appBarTextColor,
-                  ),
+                CircleAvatar(
+                  radius: screenHeight * 0.04,
+                  backgroundImage: const AssetImage('assets/images/profile.png'),
                 ),
-                Text(
-                  'Anamika',
-                  style: TextStyle(
-                    fontSize: fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textColor,
-                  ),
+                SizedBox(width: screenWidth * 0.03),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome,',
+                      style: TextStyle(
+                        fontSize: fontSize * 0.8,
+                        color: AppTheme.appBarTextColor,
+                      ),
+                    ),
+                    Text(
+                      'Anamika',
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: FontWeight.bold,
+                        color: AppTheme.textColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () {
+                    showMySnackBar(
+                      context: context,
+                      message: 'Logging out...',
+                      color: Colors.red,
+                    );
+                    context.read<DashboardCubit>().logout(context);
+                  },
                 ),
               ],
             ),
-            const Spacer(),
-            IconButton(
-              icon: Icon(
-                Icons.notifications,
-                color: AppTheme.notificationIconColor,
-                size: iconSize,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-      body: SafeArea(
-        child: BlocBuilder<DashboardCubit, DashboardState>(
-          builder: (context, state) {
-            return IndexedStack(
-              index: state.selectedNavIndex,
-              children: [
-                const HomeScreen(),
-                const SearchView(),
-                const AddView(),
-                const ProfileView(),
-               
-              ],
-            );
-          },
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 9.0),
-        padding: const EdgeInsets.all(0),
-        decoration: BoxDecoration(
-          color: AppTheme.secondaryColor,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: BottomAppBar(
-          color: Colors.transparent,
-          elevation: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildNavItem(context, Icons.home, "Home", 0),
-              _buildNavItem(context, Icons.search, "Search", 1),
-              _buildNavItem(context, Icons.add_circle_outline, "Add", 2),
-              _buildNavItem(context, Icons.person, "Profile", 3),
-            ],
           ),
+          body: state.views[state.selectedIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+              BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline), label: 'Add'),
+              BottomNavigationBarItem(icon: Icon(Icons.account_circle), label: 'Profile'),
+            ],
+            currentIndex: state.selectedIndex,
+            selectedItemColor: Colors.white,
+            onTap: (index) {
+              context.read<DashboardCubit>().onTabTapped(index);
+            },
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: _buildFloatingNavBar(context),
+        );
+      },
+    );
+  }
+
+  Widget _buildFloatingNavBar(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 11.0, vertical: 9.0),
+      padding: const EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        color: AppTheme.secondaryColor,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.4),
+            spreadRadius: 2,
+            blurRadius: 10,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: BottomAppBar(
+        color: Colors.transparent,
+        elevation: 0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildNavItem(context, Icons.home, "Home", 0),
+            _buildNavItem(context, Icons.search, "Search", 1),
+            _buildNavItem(context, Icons.add_circle_outline, "Add", 2),
+            _buildNavItem(context, Icons.person, "Profile", 3),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildNavItem(BuildContext context, IconData icon, String label, int index) {
+    final isSelected = context.watch<DashboardCubit>().state.selectedIndex == index;
+
     return GestureDetector(
       onTap: () {
-        context.read<DashboardCubit>().selectNavIndex(index);
-         if (index == 3) {
-          context.read<DashboardCubit>().navigateToProfile();}
+        context.read<DashboardCubit>().onTabTapped(index);
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -143,20 +137,16 @@ class DashboardView extends StatelessWidget {
           Icon(
             icon,
             size: 25,
-            color: context.watch<DashboardCubit>().state.selectedNavIndex == index
-                ? AppTheme.primaryColor
-                : AppTheme.appBarBackgroundColor,
+            color: isSelected ? AppTheme.primaryColor : AppTheme.appBarBackgroundColor,
           ),
           Text(
             label,
             style: TextStyle(
               fontSize: 15,
-              color: context.watch<DashboardCubit>().state.selectedNavIndex == index
-                  ? AppTheme.primaryColor
-                  : AppTheme.appBarBackgroundColor,
+              color: isSelected ? AppTheme.primaryColor : AppTheme.appBarBackgroundColor,
             ),
           ),
-          if (context.watch<DashboardCubit>().state.selectedNavIndex == index)
+          if (isSelected)
             Container(
               margin: const EdgeInsets.only(top: 4),
               width: 6,

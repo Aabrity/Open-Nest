@@ -1,13 +1,54 @@
-class DashboardState {
-  final int selectedNavIndex;
-  final bool navigateToProfile; // Add this for navigation
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_nest/app/di/di.dart';
 
-  DashboardState({required this.selectedNavIndex, this.navigateToProfile = false});
+import 'package:open_nest/features/home/presentation/view/bottom_view/home_view.dart';
+import 'package:open_nest/features/home/presentation/view_model/home/home_bloc.dart';
 
-  DashboardState copyWith({int? selectedNavIndex, bool? navigateToProfile}) {
+
+class DashboardState extends Equatable {
+   final int selectedIndex;
+  final List<Widget> views;
+
+
+ const  DashboardState({required this.selectedIndex, required this.views});
+
+// Initial state
+  static DashboardState initial() {
     return DashboardState(
-      selectedNavIndex: selectedNavIndex ?? this.selectedNavIndex,
-      navigateToProfile: navigateToProfile ?? this.navigateToProfile,
+      selectedIndex: 0,
+      views: [
+         BlocProvider(
+          create: (context) => getIt<HomeBloc>(),
+          child: HomeScreen(),
+        ),
+        const Center(
+          child: Text('Search'),
+        ),
+         const Center(
+          child: Text('Add'),
+        ),
+         const Center(
+          child: Text('Profile')
+        ),
+      
+      ],
     );
   }
+
+
+  DashboardState copyWith({int? selectedIndex,
+    List<Widget>? views,
+  }) { 
+    return DashboardState(
+      selectedIndex: selectedIndex ?? this.selectedIndex,
+      views: views ?? this.views,
+    );
+  }
+  
+  @override
+  // TODO: implement props
+  List<Object?> get props =>  [selectedIndex, views];
 }
+

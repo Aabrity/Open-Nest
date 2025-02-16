@@ -1,0 +1,2 @@
+C:/Users/User 1/Desktop/back from the scratch/Open-Nest/android/app/.cxx/Debug/1kh156m3/x86/CMakeFiles/edit_cache.dir
+C:/Users/User 1/Desktop/back from the scratch/Open-Nest/android/app/.cxx/Debug/1kh156m3/x86/CMakeFiles/rebuild_cache.dir
