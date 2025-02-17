@@ -20,9 +20,17 @@ class ApiEndpoints {
   static const String getMe = "user/getme";
 
   // ====================== Batch Routes ======================
-  // static const String createBatch = "batch/createBatch";
-  // static const String getAllBatch = "batch/getAllBatches";
-  // static const String deleteBatch = "batch/";
+  static const String createLike = "batch/createBatch";
+  static const String getAllLike = "batch/getAllBatches";
+  static const String deleteLike = "batch/";
+
+  static const String createComment = "batch/createBatch";
+  static const String getAllComment = "batch/getAllBatches";
+  static const String deleteComment = "batch/";
+
+  static const String createListing = "batch/createBatch";
+  static const String getAllListing = "batch/getAllBatches";
+  static const String deleteListing = "batch/";
 
   // ====================== Course Routes ======================
   // static const String createCourse = "course/createCourse";
