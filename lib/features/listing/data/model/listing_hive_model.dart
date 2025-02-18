@@ -46,7 +46,10 @@ class ListingHiveModel extends Equatable {
   final bool offer;
 
   @HiveField(12)
-  final List<String> imageUrls; 
+  final List<String> imageUrls;
+
+  @HiveField(13)
+  final String userRef; 
 
  
 
@@ -64,6 +67,7 @@ class ListingHiveModel extends Equatable {
     required this.type,
     required this.offer,
     required this.imageUrls,
+    required this.userRef,
   }) : listingId = listingId ?? const Uuid().v4();
 
   // Initial Constructor
@@ -80,7 +84,8 @@ class ListingHiveModel extends Equatable {
         parking = false,
         type = '',
         offer = false,
-        imageUrls = const [];
+        imageUrls = const [],
+        userRef = '';
 
   // From Entity
   factory ListingHiveModel.fromEntity(ListingEntity entity) {
@@ -98,6 +103,7 @@ class ListingHiveModel extends Equatable {
       type: entity.type,
       offer: entity.offer,
       imageUrls: entity.imageUrls,
+      userRef: entity.userRef,
     );
   }
 
@@ -117,6 +123,7 @@ class ListingHiveModel extends Equatable {
       type: type,
       offer: offer,
       imageUrls: imageUrls,
+      userRef: userRef,
     );
   }
 
@@ -145,5 +152,6 @@ class ListingHiveModel extends Equatable {
         type,
         offer,
         imageUrls,
+        userRef,
       ];
 }

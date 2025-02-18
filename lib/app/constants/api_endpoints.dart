@@ -8,7 +8,9 @@ class ApiEndpoints {
   //static const String baseUrl = "http://localhost:3000/api/";
 
   // ====================== Auth Routes ======================
-  static const String login = "auth/login";
+  // static const String login = "auth/login";
+  // static const String register = "auth/signup";
+    static const String login = "auth/login";
   static const String register = "auth/signup";
   // static const String getAllStudent = "auth/getAllStudents";
   // static const String getStudentsByBatch = "auth/getStudentsByBatch/";
@@ -28,9 +30,9 @@ class ApiEndpoints {
   static const String getAllComment = "batch/getAllBatches";
   static const String deleteComment = "batch/";
 
-  static const String createListing = "batch/createBatch";
-  static const String getAllListing = "batch/getAllBatches";
-  static const String deleteListing = "batch/";
+  static const String createListing = "listing/createListing";
+  static const String getAllListing = "listing/getAllListing";
+  static const String deleteListing = "listing/";
 
   // ====================== Course Routes ======================
   // static const String createCourse = "course/createCourse";

@@ -30,13 +30,14 @@ class ListingHiveModelAdapter extends TypeAdapter<ListingHiveModel> {
       type: fields[10] as String,
       offer: fields[11] as bool,
       imageUrls: (fields[12] as List).cast<String>(),
+      userRef: fields[13] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ListingHiveModel obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.listingId)
       ..writeByte(1)
@@ -62,7 +63,9 @@ class ListingHiveModelAdapter extends TypeAdapter<ListingHiveModel> {
       ..writeByte(11)
       ..write(obj.offer)
       ..writeByte(12)
-      ..write(obj.imageUrls);
+      ..write(obj.imageUrls)
+      ..writeByte(13)
+      ..write(obj.userRef);
   }
 
   @override

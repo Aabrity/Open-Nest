@@ -22,6 +22,7 @@ ListingApiModel _$ListingApiModelFromJson(Map<String, dynamic> json) =>
       offer: json['offer'] as bool,
       imageUrls:
           (json['imageUrls'] as List<dynamic>).map((e) => e as String).toList(),
+      userRef: json['userRef'] as String,
     );
 
 Map<String, dynamic> _$ListingApiModelToJson(ListingApiModel instance) =>
@@ -39,4 +40,5 @@ Map<String, dynamic> _$ListingApiModelToJson(ListingApiModel instance) =>
       'type': instance.type,
       'offer': instance.offer,
       'imageUrls': instance.imageUrls,
+      'userRef': instance.userRef,
     };

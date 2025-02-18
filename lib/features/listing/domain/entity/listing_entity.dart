@@ -15,6 +15,7 @@ class ListingEntity extends Equatable {
   final String type;
   final bool offer;
   final List<String> imageUrls;
+  final String userRef;
   
  
 
@@ -33,13 +34,14 @@ class ListingEntity extends Equatable {
   required this.type,
   required this.offer,
   required this.imageUrls,
+  required this.userRef,
  
 
   });
   
   @override
   
-  List<Object?> get props =>  [listingId, name, description, address, regularPrice,discountedPrice,bathrooms,bedrooms,furnished,parking,type,offer,imageUrls];
+  List<Object?> get props =>  [listingId, name, description, address, regularPrice,discountedPrice,bathrooms,bedrooms,furnished,parking,type,offer,imageUrls, userRef];
 
  
 }

@@ -3,19 +3,19 @@ part of 'listing_bloc.dart';
 class ListingState extends Equatable {
   final bool isLoading;
   final List<ListingEntity> listings;
-  final String error;
+  final String? error;
 
   const ListingState({
     required this.isLoading,
     required this.listings,
-    required this.error,
+    this.error,
   });
 
   factory ListingState.initial() {
     return ListingState(
       isLoading: false,
       listings: [],
-      error: '',
+     
     );
   }
 
@@ -27,7 +27,7 @@ class ListingState extends Equatable {
     return ListingState(
       isLoading: isLoading ?? this.isLoading,
       listings: listings ?? this.listings,
-      error: error ?? this.error,
+      error: error 
     );
   }
 

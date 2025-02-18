@@ -21,6 +21,7 @@ class ListingApiModel extends Equatable {
   final String type;
   final bool offer;
   final List<String> imageUrls;
+  final String userRef;
 
 
   const ListingApiModel({
@@ -37,6 +38,7 @@ class ListingApiModel extends Equatable {
     required this.type,
     required this.offer,
     required this.imageUrls,
+    required this.userRef,
   
   });
 
@@ -60,6 +62,7 @@ class ListingApiModel extends Equatable {
       type: type,
       offer: offer,
       imageUrls: imageUrls,
+      userRef: userRef,
      
     );
   }
@@ -80,6 +83,7 @@ class ListingApiModel extends Equatable {
       type: entity.type,
       offer: entity.offer,
       imageUrls: entity.imageUrls,
+      userRef: entity.userRef
     
     );
   }
@@ -104,6 +108,7 @@ class ListingApiModel extends Equatable {
         type,
         offer,
         imageUrls,
+        userRef
       
       ];
 }

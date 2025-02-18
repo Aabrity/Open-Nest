@@ -4,12 +4,12 @@ import 'package:open_nest/features/auth/data/model/auth_hive_model.dart';
 import 'package:open_nest/features/comments/data/model/comment_hive_model.dart';
 import 'package:open_nest/features/like/data/model/like_hive_model.dart';
 import 'package:open_nest/features/listing/data/model/listing_hive_model.dart';
-// import 'package:open_nest/features/profile/data/model/profile_hive_model.dart'; // Import Profile model
+
 import 'package:path_provider/path_provider.dart';
 
 class HiveService {
   static Future<void> init() async {
-    // Initialize the database
+   
     var directory = await getApplicationDocumentsDirectory();
     var path = '${directory.path}db_open_nest_system.db';
 

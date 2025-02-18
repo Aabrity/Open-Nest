@@ -10,11 +10,11 @@ sealed class ListingEvent extends Equatable {
 class ListingLoad extends ListingEvent {}
 
 class CreateListing extends ListingEvent {
-   final String name;
+  final String name;
   final String description;
   final String address;
   final int regularPrice;
-  final int discountedPrice;
+  final int discountPrice;
   final int bathrooms;
   final int bedrooms;
   final bool furnished;
@@ -27,21 +27,21 @@ class CreateListing extends ListingEvent {
     required this.description,
     required this.address,
     required this.regularPrice,
-    required this.discountedPrice,
+    required this.discountPrice,
     required this.bathrooms,
     required this.bedrooms,
     required this.furnished,
     required this.parking,
     required this.type,
     required this.offer,
-    required this.imageUrls,e});
+    required this.imageUrls,});
 
   @override
   List<Object> get props => [ name,
         description,
         address,
         regularPrice,
-        discountedPrice,
+        discountPrice,
         bathrooms,
         bedrooms,
         furnished,

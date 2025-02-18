@@ -18,7 +18,7 @@ class ListingRemoteDataSource implements IListingDataSource {
       var listingApiModel = ListingApiModel.fromEntity(listing);
       var response = await _dio.post(
         ApiEndpoints.createListing,
-        data: listingApiModel.toJson(),
+         data: listingApiModel.toJson(),
       );
 
       if (response.statusCode == 201) {
@@ -63,9 +63,9 @@ class ListingRemoteDataSource implements IListingDataSource {
       var response = await _dio.get(ApiEndpoints.getAllListing);
       if (response.statusCode == 200) {
         // Convert API response to DTO
-        var listingDTO = GetAllListingDTO.fromJson(response.data);
-        // Convert DTO to Entity
-        return ListingApiModel.toEntityList(listingDTO.data);
+        GetAllListingDTO listingAddDTO = GetAllListingDTO.fromJson(response.data);
+        // Convert DTO to Entity 
+        return ListingApiModel.toEntityList(listingAddDTO.data);
       } else {
         throw Exception(response.statusMessage);
       }

@@ -19,7 +19,8 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
   })  : _getAllListingUsecase = getAllListingUsecase,
         _createListingUsecase = createListingUsecase,
         _deleteListingUsecase = deleteListingUsecase,
-        super(ListingState.initial()) {
+        super(ListingState.initial()) 
+        {
     on<ListingLoad>(_onListingLoad);
     on<CreateListing>(_onCreateListing);
     on<DeleteListing>(_onDeleteListing);
@@ -50,7 +51,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
       description: event.description,
       address: event.address,
       regularPrice: event.regularPrice,
-      discountedPrice: event.discountedPrice,
+      discountPrice: event.discountPrice,
       bathrooms: event.bathrooms,
       bedrooms: event.bedrooms,
       furnished: event.furnished,

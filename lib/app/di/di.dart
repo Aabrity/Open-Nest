@@ -91,7 +91,7 @@ _initListingDependencies() async {
   // =========================== Usecases ===========================
 
   getIt.registerLazySingleton<CreateListingUsecase>(
-    () => CreateListingUsecase(listingRepository: getIt<ListingRemoteRepository>()),
+    () => CreateListingUsecase( getIt<ListingRemoteRepository>(), ),
   );
 
   getIt.registerLazySingleton<GetAllListingUsecase>(
