@@ -7,14 +7,21 @@ import 'package:open_nest/features/comments/domain/repository/comment_repository
 
 class CreateCommentParams extends Equatable {
   final String comment;
+  final String listing;
+  final String user;
 
-  const CreateCommentParams({required this.comment});
+  const CreateCommentParams({
+    this.listing='67a8594e3852a924c0029366', 
+    this.user='67b49ea1f53857accc674b3e', 
+    required this.comment
+    
+  });
 
   // Empty constructor
-  const CreateCommentParams.empty() : comment = '_empty.string';
+  const CreateCommentParams.empty(this.listing, this.user) : comment = '_empty.string';
 
   @override
-  List<Object?> get props => [comment];
+  List<Object?> get props => [comment,user,listing];
 }
 
 class CreateCommentUsecase
@@ -27,7 +34,7 @@ class CreateCommentUsecase
   @override
   Future<Either<Failure, void>> call(CreateCommentParams params) {
     return _commentRepository.createComment(
-      CommentEntity(comment: params.comment, listing: ''),
+      CommentEntity(comment: params.comment, listing: params.listing, user: params.user),
     );
   }
 }

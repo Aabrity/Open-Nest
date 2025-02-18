@@ -11,6 +11,7 @@ CommentApiModel _$CommentApiModelFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       listing: json['listing'] as String,
       comment: json['comment'] as String,
+      user: json['user'] as String,
     );
 
 Map<String, dynamic> _$CommentApiModelToJson(CommentApiModel instance) =>
@@ -18,4 +19,5 @@ Map<String, dynamic> _$CommentApiModelToJson(CommentApiModel instance) =>
       '_id': instance.id,
       'listing': instance.listing,
       'comment': instance.comment,
+      'user': instance.user,
     };

@@ -26,9 +26,9 @@ class ApiEndpoints {
   static const String getAllLike = "batch/getAllBatches";
   static const String deleteLike = "batch/";
 
-  static const String createComment = "batch/createBatch";
-  static const String getAllComment = "batch/getAllBatches";
-  static const String deleteComment = "batch/";
+  static const String createComment = "comments/createComment";
+  static const String getAllComment = "comments/getAllComment";
+  static const String deleteComment = "comments/";
 
   static const String createListing = "listing/createListing";
   static const String getAllListing = "listing/getAllListing";

@@ -25,7 +25,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
     on<CreateListing>(_onCreateListing);
     on<DeleteListing>(_onDeleteListing);
 
-    add(ListingLoad());
+    // add(ListingLoad());
   }
 
   Future<void> _onListingLoad(
@@ -65,7 +65,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        add(ListingLoad());
+        // add(ListingLoad());
       },
     );
   }
@@ -82,7 +82,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        add(ListingLoad());
+        // add(ListingLoad());
       },
     );
   }

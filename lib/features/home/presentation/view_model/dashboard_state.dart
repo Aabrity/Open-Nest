@@ -5,8 +5,11 @@ import 'package:open_nest/app/di/di.dart';
 
 import 'package:open_nest/features/home/presentation/view/bottom_view/home_view.dart';
 import 'package:open_nest/features/home/presentation/view_model/home/home_bloc.dart';
+import 'package:open_nest/features/listing/presentation/view/detail_view.dart';
 import 'package:open_nest/features/listing/presentation/view/listing_view.dart';
-import 'package:open_nest/features/listing/presentation/view_model/listing_bloc.dart';
+import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
+import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
+import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
 
 
 class DashboardState extends Equatable {
@@ -26,8 +29,12 @@ class DashboardState extends Equatable {
           child: HomeScreen(),
         ),
          BlocProvider(
+          create: (context) => getIt<CommentBloc>(),
+          child: CommentView(),
+        ),
+         BlocProvider(
           create: (context) => getIt<ListingBloc>(),
-          child: ListingView(),
+          child: ListingDetailsPage(index: 1,),
         ),
          const Center(
           child: Text('Add'),

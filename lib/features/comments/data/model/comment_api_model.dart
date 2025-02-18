@@ -11,11 +11,13 @@ class CommentApiModel extends Equatable {
   final String? id;
   final String listing; 
   final String comment;
+  final String user;
 
   const CommentApiModel({
     this.id,
     required this.listing,
     required this.comment,
+    required this.user,
   });
 
   factory CommentApiModel.fromJson(Map<String, dynamic> json) =>
@@ -28,7 +30,8 @@ class CommentApiModel extends Equatable {
     return CommentEntity(
       commentId: id, // id maps to commentId in CommentEntity
       listing: listing, // listing maps to listingId in CommentEntity
-      comment: comment, // comment maps to commentText in CommentEntity
+      comment: comment,
+      user: user, // comment maps to commentText in CommentEntity
     );
   }
 
@@ -38,6 +41,7 @@ class CommentApiModel extends Equatable {
       id: entity.commentId, 
       listing: entity.listing, 
       comment: entity.comment,
+      user: entity.user,
     );
   }
 
@@ -52,5 +56,5 @@ class CommentApiModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, listing, comment];
+  List<Object?> get props => [id, listing, comment, user];
 }

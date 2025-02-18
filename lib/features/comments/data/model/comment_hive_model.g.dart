@@ -20,19 +20,22 @@ class CommentHiveModelAdapter extends TypeAdapter<CommentHiveModel> {
       commentId: fields[0] as String?,
       listing: fields[1] as String,
       comment: fields[3] as String,
+      user: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, CommentHiveModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.commentId)
       ..writeByte(1)
       ..write(obj.listing)
       ..writeByte(3)
-      ..write(obj.comment);
+      ..write(obj.comment)
+      ..writeByte(2)
+      ..write(obj.user);
   }
 
   @override

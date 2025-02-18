@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:open_nest/app/constants/hive_table_constant.dart';
-import 'package:open_nest/features/auth/data/model/auth_hive_model.dart';
-import 'package:open_nest/features/listing/data/model/listing_hive_model.dart';
+
 import 'package:open_nest/features/comments/domain/entity/comment_entity.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,9 +15,11 @@ class CommentHiveModel extends Equatable {
   @HiveField(1)
   final String listing;
 
-
   @HiveField(3)
   final String comment;
+
+  @HiveField(2)
+  final String user;
 
 
 
@@ -26,15 +27,17 @@ class CommentHiveModel extends Equatable {
     String? commentId,
     required this.listing,
     required this.comment,
+    required this.user,
      DateTime? createdAt,
   }) : commentId = commentId ?? const Uuid().v4();
        
 
   // Initial Constructor
-  const CommentHiveModel.initial()
+  const CommentHiveModel.initial(this.user)
       : commentId = '',
         listing = '',
         comment = '';
+       
     
 
   // From Entity
@@ -43,6 +46,7 @@ class CommentHiveModel extends Equatable {
       commentId: entity.commentId ?? const Uuid().v4(),
       listing: entity.listing,
       comment: entity.comment,
+      user: entity.user
       
     );
   }
@@ -53,6 +57,7 @@ class CommentHiveModel extends Equatable {
       commentId: commentId,
       listing: listing,
       comment: comment,
+      user: user,
   
     );
   }
@@ -68,5 +73,5 @@ class CommentHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [commentId, listing, comment];
+  List<Object?> get props => [commentId, listing, comment, user];
 }

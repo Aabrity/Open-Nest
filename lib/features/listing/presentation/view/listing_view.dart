@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:open_nest/core/common/snackbar/my_snackbar.dart';
 // import 'package:open_nest/core/common/snackbar/my_snackbar.dart';
-import 'package:open_nest/features/listing/presentation/view_model/listing_bloc.dart';
+import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
 
 class ListingView extends StatefulWidget {
   const ListingView({super.key});
