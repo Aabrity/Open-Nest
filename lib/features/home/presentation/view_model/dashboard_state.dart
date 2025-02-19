@@ -34,7 +34,7 @@ class DashboardState extends Equatable {
         ),
          BlocProvider(
           create: (context) => getIt<ListingBloc>(),
-          child: ListingDetailsPage(index: 1,),
+          child: ListingView(),
         ),
          const Center(
           child: Text('Add'),

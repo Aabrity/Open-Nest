@@ -7,7 +7,7 @@ class ListingEntity extends Equatable {
   final String description;
   final String address;
   final int regularPrice;
-  final int discountedPrice;
+  final int? discountedPrice;
   final int bathrooms;
   final int bedrooms;
   final bool furnished;
@@ -26,7 +26,7 @@ class ListingEntity extends Equatable {
   required this.description,
   required this.address,
   required this.regularPrice,
-  required this.discountedPrice,
+  this.discountedPrice,
   required this.bathrooms,
   required this.bedrooms,
   required this.furnished,

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/listing/data/data_source/remote_datasource/listing_remote_datasource.dart';
 import 'package:open_nest/features/listing/domain/entity/listing_entity.dart';
@@ -38,6 +39,7 @@ class ListingRemoteRepository implements IListingRepository {
   Future<Either<Failure, List<ListingEntity>>> getListing() async {
     try {
       final listings = await listingRemoteDataSource.getListing();
+      debugPrint("Courses from Repository: $listings");
       return Right(listings);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));

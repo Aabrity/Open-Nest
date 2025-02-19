@@ -22,7 +22,7 @@ class ListingHiveModelAdapter extends TypeAdapter<ListingHiveModel> {
       description: fields[2] as String,
       address: fields[3] as String,
       regularPrice: fields[4] as int,
-      discountedPrice: fields[5] as int,
+      discountedPrice: fields[5] as int?,
       bathrooms: fields[6] as int,
       bedrooms: fields[7] as int,
       furnished: fields[8] as bool,

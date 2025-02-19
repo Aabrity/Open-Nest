@@ -13,7 +13,8 @@ class ListingApiModel extends Equatable {
   final String description;
   final String address;
   final int regularPrice;
-  final int discountedPrice;
+   @JsonKey(name: 'discountPrice')
+  final int? discountedPrice;
   final int bathrooms;
   final int bedrooms;
   final bool furnished;
@@ -30,7 +31,7 @@ class ListingApiModel extends Equatable {
     required this.description,
     required this.address,
     required this.regularPrice,
-    required this.discountedPrice,
+    this.discountedPrice,
     required this.bathrooms,
     required this.bedrooms,
     required this.furnished,
@@ -43,6 +44,27 @@ class ListingApiModel extends Equatable {
   });
 
   factory ListingApiModel.fromJson(Map<String, dynamic> json) => _$ListingApiModelFromJson(json);
+
+  // factory ListingApiModel.fromJson(Map<String, dynamic> json) {
+  //   return ListingApiModel(
+  //     listingId: json['_id'],
+  //     name: json['name'],
+  //     description: json['description'],
+  //     address: json['address'],
+  //     regularPrice: json['regularPrice'],
+  //     discountedPrice: json['discountPrice'] != null 
+  //         ? (json['discountPrice'] as num).toInt() 
+  //         : null,
+  //     bathrooms: json['bathrooms'],
+  //     bedrooms: json['bedrooms'],
+  //     furnished: json['furnished'],
+  //     parking: json['parking'],
+  //     type: json['type'],
+  //     offer: json['offer'],
+  //     imageUrls: json['imageUrls'],
+  //     userRef: json['userRef'],
+  //   );
+  // }
 
   Map<String, dynamic> toJson() => _$ListingApiModelToJson(this);
 

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/app/usecase/usecase.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/listing/domain/entity/listing_entity.dart';
@@ -12,7 +13,15 @@ class GetAllListingUsecase
       : _listingRepository = listingRepository;
 
   @override
-  Future<Either<Failure, List<ListingEntity>>> call() {
-    return _listingRepository.getListing();
+  Future<Either<Failure, List<ListingEntity>>> call() async {
+    // return _listingRepository.getListing();
+    final result = await _listingRepository.getListing();
+
+  result.fold(
+    (failure) => debugPrint("UseCase Error: $failure"),
+    (listings) => debugPrint("Data in UseCase: $listings"),  // Debugging here
+  );
+
+  return result;
   }
 }

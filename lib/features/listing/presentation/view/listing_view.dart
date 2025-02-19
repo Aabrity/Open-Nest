@@ -208,7 +208,7 @@ class _ListingViewState extends State<ListingView> {
                     decoration:
                         const InputDecoration(labelText: 'Listing Type'),
                   ),
-                  // const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
                       if (_listingViewFormKey.currentState!.validate()) {
@@ -254,8 +254,10 @@ class _ListingViewState extends State<ListingView> {
                         message: state.error!,
                         color: Colors.red,
                       );
-                    } else {
-                      return Expanded(
+                    } 
+                    else {
+                      return SizedBox(
+                         height: 300,
                         child: ListView.builder(
                           itemCount: state.listings.length,
                           itemBuilder: (BuildContext context, index) {
@@ -271,7 +273,7 @@ class _ListingViewState extends State<ListingView> {
                                       return AlertDialog(
                                         title: Text('Delete Batch'),
                                         content: Text(
-                                            'Are you sure you want to delete ${state.listings[index].name} batch?'),
+                                            'Are you sure you want to delete ${state.listings[index].name} listing?'),
                                         actions: [
                                           TextButton(
                                             child: Text('Cancel'),
@@ -282,13 +284,15 @@ class _ListingViewState extends State<ListingView> {
                                           TextButton(
                                             child: Text('Delete'),
                                             onPressed: () {
+                                                
                                               context.read<ListingBloc>().add(
                                                     DeleteListing(
                                                       id: state.listings[index]
                                                           .listingId!,
                                                     ),
                                                   );
-
+                                                
+                                                
                                               Navigator.of(context).pop();
                                             },
                                           ),

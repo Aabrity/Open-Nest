@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/features/listing/domain/entity/listing_entity.dart';
 import 'package:open_nest/features/listing/domain/use_case/create_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/delete_listing_usecase.dart';
@@ -25,19 +26,24 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
     on<CreateListing>(_onCreateListing);
     on<DeleteListing>(_onDeleteListing);
 
-    // add(ListingLoad());
+    add(ListingLoad());
   }
 
   Future<void> _onListingLoad(
     ListingLoad event,
     Emitter<ListingState> emit,
   ) async {
+    // debugPrint(event.listing)
+    
     emit(state.copyWith(isLoading: true));
     final result = await _getAllListingUsecase();
+    
     result.fold(
       (failure) =>
           emit(state.copyWith(isLoading: false, error: failure.message)),
-      (listings) => emit(state.copyWith(isLoading: false, listings: listings)),
+      (listings)  {debugPrint("bloc data: $listings");
+        emit(state.copyWith(isLoading: false, listings: listings));},
+       
     );
   }
 
@@ -65,7 +71,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        // add(ListingLoad());
+        add(ListingLoad());
       },
     );
   }
@@ -82,7 +88,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        // add(ListingLoad());
+        add(ListingLoad());
       },
     );
   }

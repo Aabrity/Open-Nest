@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/app/constants/api_endpoints.dart';
 import 'package:open_nest/features/listing/data/data_source/listing_data_source.dart';
 import 'package:open_nest/features/listing/data/dto/get_all_listing_dto.dart';
@@ -63,9 +64,12 @@ class ListingRemoteDataSource implements IListingDataSource {
       var response = await _dio.get(ApiEndpoints.getAllListing);
       if (response.statusCode == 200) {
         // Convert API response to DTO
-        GetAllListingDTO listingAddDTO = GetAllListingDTO.fromJson(response.data);
+        var listingAddDTO = GetAllListingDTO.fromJson(response.data);
+        // debugPrint("remote data: $listingAddDTO");
+        debugPrint("remote data: ${response.data}");
         // Convert DTO to Entity 
         return ListingApiModel.toEntityList(listingAddDTO.data);
+        
       } else {
         throw Exception(response.statusMessage);
       }

@@ -25,7 +25,7 @@ class ListingHiveModel extends Equatable {
   final int regularPrice;
 
   @HiveField(5)
-  final int discountedPrice;
+  final int? discountedPrice;
 
   @HiveField(6)
   final int bathrooms;
@@ -59,7 +59,7 @@ class ListingHiveModel extends Equatable {
     required this.description,
     required this.address,
     required this.regularPrice,
-    required this.discountedPrice,
+    this.discountedPrice,
     required this.bathrooms,
     required this.bedrooms,
     required this.furnished,
