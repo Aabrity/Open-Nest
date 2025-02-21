@@ -11,7 +11,7 @@ class CreateCommentParams extends Equatable {
   final String user;
 
   const CreateCommentParams({
-    this.listing='67a8594e3852a924c0029366', 
+    required this.listing, 
     this.user='67b49ea1f53857accc674b3e', 
     required this.comment
     

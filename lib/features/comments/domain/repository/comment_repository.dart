@@ -7,4 +7,5 @@ abstract interface class ICommentRepository {
  Future<Either<Failure, void>> createComment(CommentEntity comment);
   Future<Either<Failure, void>> deleteComment(String id, String? token);
    Future<Either<Failure, List<CommentEntity>>> getComment();
+    Future<Either<Failure, List<CommentEntity>>> getListingComment(String listingId);
 }

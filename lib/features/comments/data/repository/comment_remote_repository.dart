@@ -43,4 +43,14 @@ class CommentRemoteRepository implements ICommentRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<CommentEntity>>> getListingComment(String listingId) async{
+    try {
+      final comments = await _commentRemoteDataSource.getListingComment(listingId);
+      return Right(comments);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

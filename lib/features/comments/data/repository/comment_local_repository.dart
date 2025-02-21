@@ -43,4 +43,10 @@ class CommentLocalRepository implements ICommentRepository {
       return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<CommentEntity>>> getListingComment(String listingId) {
+    // TODO: implement getListingComment
+    throw UnimplementedError();
+  }
 }

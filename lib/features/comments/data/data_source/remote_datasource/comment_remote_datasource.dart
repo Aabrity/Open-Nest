@@ -1,3 +1,4 @@
+
 import 'package:dio/dio.dart';
 import 'package:open_nest/app/constants/api_endpoints.dart';
 import 'package:open_nest/features/comments/data/data_source/comment_data_source.dart';
@@ -75,4 +76,23 @@ class CommentRemoteDataSource implements ICommentDataSource {
       throw Exception(e);
     }
   }
-}
+  
+  @override
+  Future<List<CommentEntity>> getListingComment(String listingId) async {
+    try {
+     var response = await _dio.get(ApiEndpoints.getAllListingComment + listingId);
+      if (response.statusCode == 200) {
+        // Convert API response to DTO
+        var commentDTO = GetAllCommentDTO.fromJson(response.data);
+        // Convert DTO to Entity
+        return CommentApiModel.toEntityList(commentDTO.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+
+}}

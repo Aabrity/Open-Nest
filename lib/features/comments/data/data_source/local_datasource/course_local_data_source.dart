@@ -39,4 +39,10 @@ class CommentLocalDataSource implements ICommentDataSource {
       throw LocalDatabaseFailure(message: e.toString());
     }
   }
+  
+  @override
+  Future<List<CommentEntity>> getListingComment(String listingId) {
+    // TODO: implement getlistingComment
+    throw UnimplementedError();
+  }
 }

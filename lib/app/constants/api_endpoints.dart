@@ -28,6 +28,7 @@ class ApiEndpoints {
 
   static const String createComment = "comments/createComment";
   static const String getAllComment = "comments/getAllComment";
+  static const String getAllListingComment = "comments/get/";
   static const String deleteComment = "comments/";
 
   static const String createListing = "listing/createListing";

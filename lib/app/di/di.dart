@@ -16,6 +16,7 @@ import 'package:open_nest/features/comments/data/repository/comment_remote_repos
 import 'package:open_nest/features/comments/domain/use_case/create_comment_usecase.dart';
 import 'package:open_nest/features/comments/domain/use_case/delete_comment_usecase.dart';
 import 'package:open_nest/features/comments/domain/use_case/get_all_comment_usecase.dart';
+import 'package:open_nest/features/comments/domain/use_case/get_comments_by_id.dart';
 import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_cubit.dart';
 import 'package:open_nest/features/like/data/data_source/local_datasource/like_local_data_source.dart';
@@ -199,6 +200,9 @@ _initCommentDependencies() async {
   getIt.registerLazySingleton<GetAllCommentUsecase>(
     () => GetAllCommentUsecase(commentRepository: getIt<CommentRemoteRepository>()),
   );
+   getIt.registerLazySingleton<GetCommentsByListingUsecase>(
+    () => GetCommentsByListingUsecase(commentRepository: getIt<CommentRemoteRepository>()),
+  );
 
   getIt.registerLazySingleton<DeleteCommentUsecase>(
     () => DeleteCommentUsecase(
@@ -211,7 +215,8 @@ _initCommentDependencies() async {
   getIt.registerFactory<CommentBloc>(
     () => CommentBloc(getAllCommentUsecase:  getIt<GetAllCommentUsecase>(), 
     createCommentUsecase: getIt<CreateCommentUsecase>(),
-     deleteCommentUsecase: getIt<DeleteCommentUsecase>(),
+     deleteCommentUsecase: getIt<DeleteCommentUsecase>(), 
+    getCommentsByListingUsecase: getIt<GetCommentsByListingUsecase>(),
       
     ),
   );
@@ -267,6 +272,7 @@ _initHomeDependencies() async {
   getIt.registerFactory<DashboardCubit>(
     () => DashboardCubit(),
   );
+  
 }
 
 _initLoginDependencies() async {
