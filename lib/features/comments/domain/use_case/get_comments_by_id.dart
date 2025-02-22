@@ -28,6 +28,7 @@ class GetCommentsByListingUsecase
   Future<Either<Failure, List<CommentEntity>>> call(GetCommentsByListingParams params) async {
     // return _commentRepository.getListingComment(params.listingId);
      final result = await _commentRepository.getListingComment(params.listingId);
+     debugPrint("Fetching comments for listingId: ${params.listingId}");
 
   result.fold(
     (failure) => debugPrint("UseCase Error: $failure"),

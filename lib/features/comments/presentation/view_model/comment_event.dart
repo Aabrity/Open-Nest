@@ -6,9 +6,13 @@ sealed class CommentEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
-
 class CommentLoad extends CommentEvent {
- 
+  final String listingId; // Optional listingId
+
+  const CommentLoad({required this.listingId});
+
+  @override
+  List<Object> get props => [listingId];
 }
 
 class CreateComment extends CommentEvent {
@@ -23,8 +27,9 @@ class CreateComment extends CommentEvent {
 
 class DeleteComment extends CommentEvent {
   final String id;
+  final String listingId;
 
-  const DeleteComment({required this.id});
+  const DeleteComment({ required this.listingId, required this.id});
 
   @override
   List<Object> get props => [id];

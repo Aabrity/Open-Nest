@@ -155,7 +155,7 @@ class CommentView extends StatelessWidget {
                               icon: Icon(Icons.delete),
                               onPressed: () {
                                 context.read<CommentBloc>().add(
-                                      DeleteComment(id: comment.commentId!),
+                                      DeleteComment(id: comment.commentId!, listingId: comment.listing),
                                     );
                               },
                             ),

@@ -19,7 +19,7 @@ import 'package:open_nest/features/comments/domain/use_case/get_all_comment_usec
 import 'package:open_nest/features/comments/domain/use_case/get_comments_by_id.dart';
 import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
 import 'package:open_nest/features/home/presentation/view_model/dashboard_cubit.dart';
-import 'package:open_nest/features/home/presentation/view_model/search/search_bloc.dart';
+// import 'package:open_nest/features/home/presentation/view_model/search/search_bloc.dart';
 import 'package:open_nest/features/like/data/data_source/local_datasource/like_local_data_source.dart';
 import 'package:open_nest/features/like/data/data_source/remote_datasource/like_remote_datasource.dart';
 import 'package:open_nest/features/like/data/repository/like_local_repository.dart';
@@ -64,9 +64,8 @@ Future<void> initDependencies() async {
   await _initLikeDependencies();
   await _initCommentDependencies();
 
-    getIt.registerFactory<SearchBloc>(
-    () => SearchBloc(listingBloc: getIt<ListingBloc>()),
-  );
+   
+  
 }
 
 _initHiveService() {
@@ -229,7 +228,7 @@ _initCommentDependencies() async {
   getIt.registerFactory<CommentBloc>(
     () => CommentBloc(getAllCommentUsecase:  getIt<GetAllCommentUsecase>(), 
     createCommentUsecase: getIt<CreateCommentUsecase>(),
-     deleteCommentUsecase: getIt<DeleteCommentUsecase>(), 
+     deleteCommentUsecase: getIt<DeleteCommentUsecase>(), getCommentsByListingUsecase: getIt<GetCommentsByListingUsecase>(), 
     // getCommentsByListingUsecase: getIt<GetCommentsByListingUsecase>(),
       
     ),
