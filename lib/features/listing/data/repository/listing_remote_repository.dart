@@ -45,4 +45,14 @@ class ListingRemoteRepository implements IListingRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedListing, String token) async {
+    try {
+      await listingRemoteDataSource.updateListing(id, updatedListing, token);
+      return Right(null);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

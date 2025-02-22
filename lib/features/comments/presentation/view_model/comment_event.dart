@@ -7,7 +7,9 @@ sealed class CommentEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class CommentLoad extends CommentEvent {}
+class CommentLoad extends CommentEvent {
+ 
+}
 
 class CreateComment extends CommentEvent {
   final String comment;

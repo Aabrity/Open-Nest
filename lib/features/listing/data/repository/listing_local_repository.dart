@@ -43,4 +43,10 @@ class ListingLocalRepository implements IListingRepository {
       return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
     }
   }
+  
+  @override
+  Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedListing, String token) {
+    // TODO: implement updateListing
+    throw UnimplementedError();
+  }
 }

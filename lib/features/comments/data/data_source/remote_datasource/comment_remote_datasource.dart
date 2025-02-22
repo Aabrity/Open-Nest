@@ -1,5 +1,6 @@
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/app/constants/api_endpoints.dart';
 import 'package:open_nest/features/comments/data/data_source/comment_data_source.dart';
 import 'package:open_nest/features/comments/data/dto/get_all_comment_dto.dart';
@@ -78,12 +79,14 @@ class CommentRemoteDataSource implements ICommentDataSource {
   }
   
   @override
-  Future<List<CommentEntity>> getListingComment(String listingId) async {
+  Future<List<CommentEntity>> getListingComment(String listing) async {
     try {
-     var response = await _dio.get(ApiEndpoints.getAllListingComment + listingId);
+     var response = await _dio.get(ApiEndpoints.getAllListingComment + listing);
       if (response.statusCode == 200) {
         // Convert API response to DTO
         var commentDTO = GetAllCommentDTO.fromJson(response.data);
+
+         debugPrint("remote data: ${response.data}");
         // Convert DTO to Entity
         return CommentApiModel.toEntityList(commentDTO.data);
       } else {

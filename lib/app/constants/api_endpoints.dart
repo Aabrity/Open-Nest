@@ -34,6 +34,7 @@ class ApiEndpoints {
   static const String createListing = "listing/createListing";
   static const String getAllListing = "listing/getAllListing";
   static const String deleteListing = "listing/";
+  static const String updateListing = "listing/";
 
   // ====================== Course Routes ======================
   // static const String createCourse = "course/createCourse";

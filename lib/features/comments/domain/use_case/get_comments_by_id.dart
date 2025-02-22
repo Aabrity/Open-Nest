@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/app/usecase/usecase.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/comments/domain/entity/comment_entity.dart';
@@ -24,7 +25,15 @@ class GetCommentsByListingUsecase
       : _commentRepository = commentRepository;
 
   @override
-  Future<Either<Failure, List<CommentEntity>>> call(GetCommentsByListingParams params) {
-    return _commentRepository.getListingComment(params.listingId);
+  Future<Either<Failure, List<CommentEntity>>> call(GetCommentsByListingParams params) async {
+    // return _commentRepository.getListingComment(params.listingId);
+     final result = await _commentRepository.getListingComment(params.listingId);
+
+  result.fold(
+    (failure) => debugPrint("UseCase Error: $failure"),
+    (comments) => debugPrint("Data in UseCase: $comments"),  // Debugging here
+  );
+
+  return result;
   }
 }

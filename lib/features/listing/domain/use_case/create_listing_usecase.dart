@@ -12,7 +12,7 @@ class CreateListingParams extends Equatable {
   final String description;
   final String address;
   final int regularPrice;
-  final int discountPrice;
+  final int discountedPrice;
   final int bathrooms;
   final int bedrooms;
   final bool furnished;
@@ -27,7 +27,7 @@ class CreateListingParams extends Equatable {
   required this.description,
   required this.address,
   required this.regularPrice,
-  required this.discountPrice,
+  required this.discountedPrice,
   required this.bathrooms,
   required this.bedrooms,
   required this.furnished,
@@ -42,7 +42,7 @@ class CreateListingParams extends Equatable {
   required this.description,
   required this.address,
   required this.regularPrice,
-  required this.discountPrice,
+  required this.discountedPrice,
   required this.bathrooms,
   required this.bedrooms,
   required this.furnished,
@@ -54,7 +54,7 @@ class CreateListingParams extends Equatable {
   
   @override
   // TODO: implement props
-  List<Object?> get props =>  [ name, description, address, regularPrice,discountPrice,bathrooms,bedrooms,furnished,parking,type,offer,imageUrls, userRef];
+  List<Object?> get props =>  [ name, description, address, regularPrice,discountedPrice,bathrooms,bedrooms,furnished,parking,type,offer,imageUrls, userRef];
 
   
 
@@ -76,7 +76,7 @@ class CreateListingUsecase
       description: params.description,
       address: params.address,
       regularPrice: params.regularPrice,
-      discountedPrice: params.discountPrice,
+      discountedPrice: params.discountedPrice,
       bathrooms: params.bathrooms,
       bedrooms: params.bedrooms,
       furnished: params.furnished,

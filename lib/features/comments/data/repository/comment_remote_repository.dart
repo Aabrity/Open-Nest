@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/comments/data/data_source/remote_datasource/comment_remote_datasource.dart';
 import 'package:open_nest/features/comments/domain/entity/comment_entity.dart';
@@ -45,9 +46,10 @@ class CommentRemoteRepository implements ICommentRepository {
   }
   
   @override
-  Future<Either<Failure, List<CommentEntity>>> getListingComment(String listingId) async{
+  Future<Either<Failure, List<CommentEntity>>> getListingComment(String listing) async{
     try {
-      final comments = await _commentRemoteDataSource.getListingComment(listingId);
+      final comments = await _commentRemoteDataSource.getListingComment(listing);
+       debugPrint("Comments from Repository: $comments");
       return Right(comments);
     } catch (e) {
       return Left(ApiFailure(message: e.toString()));

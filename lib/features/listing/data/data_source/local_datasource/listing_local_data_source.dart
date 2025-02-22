@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/core/network/hive_service.dart';
 import 'package:open_nest/features/listing/data/data_source/listing_data_source.dart';
@@ -38,5 +39,11 @@ class ListingLocalDataSource implements IListingDataSource {
     } catch (e) {
       throw LocalDatabaseFailure(message: e.toString());
     }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedListing, String token) {
+    // TODO: implement updateListing
+    throw UnimplementedError();
   }
 }

@@ -45,7 +45,7 @@ class CommentLocalRepository implements ICommentRepository {
   }
   
   @override
-  Future<Either<Failure, List<CommentEntity>>> getListingComment(String listingId) {
+  Future<Either<Failure, List<CommentEntity>>> getListingComment(String listing) {
     // TODO: implement getListingComment
     throw UnimplementedError();
   }

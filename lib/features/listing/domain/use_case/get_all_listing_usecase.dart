@@ -25,3 +25,8 @@ class GetAllListingUsecase
   return result;
   }
 }
+
+
+
+
+

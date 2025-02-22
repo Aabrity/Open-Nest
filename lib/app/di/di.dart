@@ -34,6 +34,7 @@ import 'package:open_nest/features/listing/data/repository/listing_remote_reposi
 import 'package:open_nest/features/listing/domain/use_case/create_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/delete_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/get_all_listing_usecase.dart';
+import 'package:open_nest/features/listing/domain/use_case/update_Usecase.dart';
 import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
 import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_cubit.dart';
 // import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_bloc.dart';
@@ -106,11 +107,19 @@ _initListingDependencies() async {
     ),
   );
 
+  getIt.registerLazySingleton<UpdateListingUsecase>(
+    () => UpdateListingUsecase(
+      listingRepository: getIt<ListingRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(),
+    ),
+  );
+
   // =========================== Bloc ===========================
   getIt.registerFactory<ListingBloc>(
     () => ListingBloc(getAllListingUsecase:  getIt<GetAllListingUsecase>(), 
     createListingUsecase: getIt<CreateListingUsecase>(),
-     deleteListingUsecase: getIt<DeleteListingUsecase>(),
+     deleteListingUsecase: getIt<DeleteListingUsecase>(), 
+     updateListingUsecase: getIt<UpdateListingUsecase>(),
       
     ),
   );
@@ -216,7 +225,7 @@ _initCommentDependencies() async {
     () => CommentBloc(getAllCommentUsecase:  getIt<GetAllCommentUsecase>(), 
     createCommentUsecase: getIt<CreateCommentUsecase>(),
      deleteCommentUsecase: getIt<DeleteCommentUsecase>(), 
-    getCommentsByListingUsecase: getIt<GetCommentsByListingUsecase>(),
+    // getCommentsByListingUsecase: getIt<GetCommentsByListingUsecase>(),
       
     ),
   );

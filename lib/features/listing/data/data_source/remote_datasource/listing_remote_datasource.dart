@@ -1,6 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:open_nest/app/constants/api_endpoints.dart';
+import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/listing/data/data_source/listing_data_source.dart';
 import 'package:open_nest/features/listing/data/dto/get_all_listing_dto.dart';
 import 'package:open_nest/features/listing/data/model/listing_api_model.dart';
@@ -79,4 +81,34 @@ class ListingRemoteDataSource implements IListingDataSource {
       throw Exception(e);
     }
   }
+@override
+Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedListing, String token) async {
+  try {
+    // Convert ListingEntity to API model
+    var listingApiModel = ListingApiModel.fromEntity(updatedListing);
+
+    // Send PUT request to update listing
+    var response = await _dio.put(
+      (ApiEndpoints.updateListing + id), // Ensure API endpoint is correct
+      data: listingApiModel.toJson(),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return const Right(null); // Successful update
+    } else {
+       throw Exception(response.statusMessage);
+    }
+  } on DioException catch (e) {
+   throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+}
+
 }
