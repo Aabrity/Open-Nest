@@ -5,8 +5,10 @@ import 'package:open_nest/app/di/di.dart';
 import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
 
 import 'package:open_nest/features/home/presentation/view/bottom_view/home_view.dart';
+import 'package:open_nest/features/home/presentation/view/search/search_view.dart';
 import 'package:open_nest/features/home/presentation/view_model/home/home_bloc.dart';
-import 'package:open_nest/features/listing/presentation/view/detail_view.dart';
+// import 'package:open_nest/features/home/presentation/view_model/search/search_bloc.dart';
+// import 'package:open_nest/features/listing/presentation/view/detail_view.dart';
 import 'package:open_nest/features/listing/presentation/view/listing_view.dart';
 import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
 
@@ -43,6 +45,10 @@ class DashboardState extends Equatable {
         //   create: (context) => getIt<ListingBloc>(),
         //   child: HomeScreen(),
         // ),
+         BlocProvider(
+          create: (context) => getIt<ListingBloc>(),
+          child: SearchListingView(),
+        ),
          BlocProvider(
           create: (context) => getIt<CommentBloc>(),
           child: CommentView(listingId: '',),
