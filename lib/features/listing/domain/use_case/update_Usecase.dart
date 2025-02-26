@@ -22,7 +22,7 @@ class UpdateListingParams extends Equatable {
   final String type;
   final bool offer;
   final List<String> imageUrls;
-  final String userRef;
+  final String? userRef;
 
   const UpdateListingParams({
     required this.id,
@@ -38,7 +38,7 @@ class UpdateListingParams extends Equatable {
     required this.type,
     required this.offer,
     required this.imageUrls,
-    this.userRef = "67b1c0064b3b1ea3b5e74c43",
+    this.userRef ,
   });
   
 
@@ -59,7 +59,10 @@ class UpdateListingUsecase implements UsecaseWithParams<void, UpdateListingParam
   @override
   Future<Either<Failure, void>> call(UpdateListingParams params) async {
      final token = await tokenSharedPrefs.getToken();
-    
+     final userRef = await tokenSharedPrefs.getUserId();
+       return userRef.fold((l) {
+      return Left(l);
+    }, (r) async {
     return token.fold(
       (failure) => Left(failure),
       (tokenValue) async => _listingRepository.updateListing(
@@ -78,8 +81,9 @@ class UpdateListingUsecase implements UsecaseWithParams<void, UpdateListingParam
         type: params.type,
         offer: params.offer,
         imageUrls: params.imageUrls,
-        userRef: params.userRef, // Update this if necessary
+        userRef: r, // Update this if necessary
       ),tokenValue
     ));
-  }
+  });
+}
 }

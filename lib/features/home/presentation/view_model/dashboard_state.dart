@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_nest/app/di/di.dart';
+import 'package:open_nest/features/auth/presentation/view/profile_view.dart';
+import 'package:open_nest/features/auth/presentation/view_model/profile_bloc.dart';
 import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
 
 import 'package:open_nest/features/home/presentation/view/bottom_view/home_view.dart';
@@ -50,18 +52,13 @@ class DashboardState extends Equatable {
           child: SearchListingView(),
         ),
          BlocProvider(
-          create: (context) => getIt<CommentBloc>(),
-          child: CommentView(listingId: '',),
-        ),
-         BlocProvider(
           create: (context) => getIt<ListingBloc>(),
           child: ListingView(),
         ),
-         const Center(
-          child: Text('Add'),
-        ),
-         const Center(
-          child: Text('Profile')
+        
+         BlocProvider(
+          create: (context) => getIt<ProfileBloc>(),
+          child: ProfilePage(),
         ),
       
       ],

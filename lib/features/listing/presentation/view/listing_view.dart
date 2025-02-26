@@ -651,7 +651,7 @@ class _ListingViewState extends State<ListingView> {
   bool offer = false;
   bool furnished = false;
   bool parking = false;
-  String? type = 'Rent';
+  String? type = 'rent';
 
   final _listingViewFormKey = GlobalKey<FormState>();
 
@@ -861,7 +861,7 @@ class _ListingViewState extends State<ListingView> {
                 // Listing Type Dropdown
                 DropdownButtonFormField<String>(
                   value: type,
-                  items: ['Rent', 'Sale'].map((String typeOption) {
+                  items: ['rent', 'sale'].map((String typeOption) {
                     return DropdownMenuItem<String>(
                       value: typeOption,
                       child: Text(typeOption),

@@ -8,4 +8,5 @@ abstract interface class IListingDataSource {
   Future<void> createListing(ListingEntity listing);
   Future<void> deleteListing(String id, String?token);
   Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedListing, String token);
+  Future<List<ListingEntity>> getUserListing(String userRef);
 }

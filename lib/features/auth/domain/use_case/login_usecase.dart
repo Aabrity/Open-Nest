@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:open_nest/app/usecase/usecase.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/auth/domain/repository/auth_repository.dart';
-
+import 'package:jwt_decoder/jwt_decoder.dart';
 import '../../../../app/shared_prefs/token_shared_prefs.dart';
 
 
@@ -39,32 +40,25 @@ class LoginUseCase implements UsecaseWithParams<String, LoginParams> {
         .then((value) {
       return value.fold(
         (failure) => Left(failure),
-        (token) {
-          tokenSharedPrefs.saveToken(token);
-          tokenSharedPrefs.getToken().then((value) {
-            print(value);
-          });
-          return Right(token);
+        (token) async {
+          await tokenSharedPrefs.saveToken(token);
+        final savedToken = await tokenSharedPrefs.getToken();
+        print(savedToken);
+
+        final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+        final String? userId = decodedToken['id'];
+
+        if (userId != null) {
+          await tokenSharedPrefs.saveUserId(userId);
+          debugPrint("User ID saved: $userId");
+        } else {
+          debugPrint("User ID not found in token!");
+        }
+        return Right(token);
         },
       );
     });
-  //  Future<Either<Failure, String>> call(LoginParams params) async {
-  //   // Perform login
-  //   final result = await repository.loginUser(params.username, params.password);
-    
-  //   return result.fold(
-  //     (failure) => Left(failure), // Return failure if login fails
-  //     (token) async {
-  //       // Save token in Shared Preferences
-  //       await tokenSharedPrefs.saveToken(token);
-        
-  //       // Retrieve token from Shared Preferences to confirm it
-  //       final savedToken = await tokenSharedPrefs.getToken();
-  //       print(savedToken); // For debugging purposes
-        
-  //       return Right(savedToken);
-  //       },
-  //   );
+
     
   }
 }

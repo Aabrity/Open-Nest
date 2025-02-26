@@ -7,7 +7,12 @@ sealed class ListingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ListingLoad extends ListingEvent {}
+class ListingLoad extends ListingEvent {
+  
+}
+
+class ListingLoadAll extends ListingEvent {}
+
 
 class CreateListing extends ListingEvent {
   final BuildContext context;

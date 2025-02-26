@@ -8,7 +8,7 @@ abstract interface class IListingRepository {
   Future<Either<Failure, void>> createListing(ListingEntity listing);
   Future<Either<Failure, void>> deleteListing(String id, String? token);
    Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedListing, String token);
-}
+Future<Either<Failure, List<ListingEntity>>> getUserListing(String userRef);}
 
 
 

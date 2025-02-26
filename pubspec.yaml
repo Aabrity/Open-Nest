@@ -55,6 +55,7 @@ dependencies:
   provider: ^6.1.2
   mocktail: ^1.0.4
   test_cov_console: ^0.2.2
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:

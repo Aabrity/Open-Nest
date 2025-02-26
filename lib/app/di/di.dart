@@ -5,9 +5,11 @@ import 'package:open_nest/core/network/api_service.dart';
 import 'package:open_nest/core/network/hive_service.dart';
 import 'package:open_nest/features/auth/data/data_source/local_data_source/auth_local_datasource.dart';
 import 'package:open_nest/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
+import 'package:open_nest/features/auth/domain/use_case/get_Current_user.dart';
 import 'package:open_nest/features/auth/domain/use_case/login_usecase.dart';
 import 'package:open_nest/features/auth/domain/use_case/register_user_usecase.dart';
 import 'package:open_nest/features/auth/presentation/view_model/login/login_bloc.dart';
+import 'package:open_nest/features/auth/presentation/view_model/profile_bloc.dart';
 import 'package:open_nest/features/auth/presentation/view_model/signup/register_bloc.dart';
 import 'package:open_nest/features/comments/data/data_source/local_datasource/course_local_data_source.dart';
 import 'package:open_nest/features/comments/data/data_source/remote_datasource/comment_remote_datasource.dart';
@@ -35,6 +37,7 @@ import 'package:open_nest/features/listing/data/repository/listing_remote_reposi
 import 'package:open_nest/features/listing/domain/use_case/create_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/delete_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/get_all_listing_usecase.dart';
+import 'package:open_nest/features/listing/domain/use_case/get_listing_by_id_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/update_Usecase.dart';
 import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
 import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_cubit.dart';
@@ -97,11 +100,17 @@ _initListingDependencies() async {
   // =========================== Usecases ===========================
 
   getIt.registerLazySingleton<CreateListingUsecase>(
-    () => CreateListingUsecase( getIt<ListingRemoteRepository>(), ),
+    () => CreateListingUsecase( listingRepository: getIt<ListingRemoteRepository>(),
+      tokenSharedPrefs: getIt<TokenSharedPrefs>(), 
+     ),
   );
 
   getIt.registerLazySingleton<GetAllListingUsecase>(
     () => GetAllListingUsecase(listingRepository: getIt<ListingRemoteRepository>()),
+  );
+
+   getIt.registerLazySingleton<GetUserListingUsecase>(
+    () => GetUserListingUsecase( listingRepository: getIt<ListingRemoteRepository>(),tokenSharedPrefs: getIt<TokenSharedPrefs>(),),
   );
 
   getIt.registerLazySingleton<DeleteListingUsecase>(
@@ -123,7 +132,7 @@ _initListingDependencies() async {
     () => ListingBloc(getAllListingUsecase:  getIt<GetAllListingUsecase>(), 
     createListingUsecase: getIt<CreateListingUsecase>(),
      deleteListingUsecase: getIt<DeleteListingUsecase>(), 
-     updateListingUsecase: getIt<UpdateListingUsecase>(),
+     updateListingUsecase: getIt<UpdateListingUsecase>(), getUserListingUsecase: getIt<GetUserListingUsecase>(),
       
     ),
   );
@@ -207,7 +216,8 @@ _initCommentDependencies() async {
   // =========================== Usecases ===========================
 
   getIt.registerLazySingleton<CreateCommentUsecase>(
-    () => CreateCommentUsecase(commentRepository: getIt<CommentRemoteRepository>()),
+    () => CreateCommentUsecase(commentRepository: getIt<CommentRemoteRepository>(),
+    tokenSharedPrefs: getIt<TokenSharedPrefs>(),)
   );
 
   getIt.registerLazySingleton<GetAllCommentUsecase>(
@@ -307,6 +317,12 @@ _initLoginDependencies() async {
       registerBloc: getIt<RegisterBloc>(),
       loginUseCase: getIt<LoginUseCase>(),
       dashboardCubit: getIt<DashboardCubit>(),
+    ),
+  );
+
+   getIt.registerFactory<ProfileBloc>(
+    () => ProfileBloc(fetchCurrentUserUseCase: getIt<FetchCurrentUserUseCase>(),
+    
     ),
   );
 }

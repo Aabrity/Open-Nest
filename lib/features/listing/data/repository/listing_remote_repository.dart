@@ -55,4 +55,16 @@ class ListingRemoteRepository implements IListingRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+
+  
+  @override
+  Future<Either<Failure, List<ListingEntity>>> getUserListing(String userRef) async{
+    try {
+      final listings = await listingRemoteDataSource.getUserListing(userRef);
+       debugPrint("Listings from Repository: $listings");
+      return Right(listings);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }

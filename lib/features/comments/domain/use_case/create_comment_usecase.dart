@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:open_nest/app/shared_prefs/token_shared_prefs.dart';
 import 'package:open_nest/app/usecase/usecase.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/comments/domain/entity/comment_entity.dart';
@@ -8,11 +9,11 @@ import 'package:open_nest/features/comments/domain/repository/comment_repository
 class CreateCommentParams extends Equatable {
   final String comment;
   final String listing;
-  final String user;
+  final String? user;
 
   const CreateCommentParams({
     required this.listing, 
-    this.user='67b49ea1f53857accc674b3e', 
+     this.user, 
     required this.comment
     
   });
@@ -27,14 +28,20 @@ class CreateCommentParams extends Equatable {
 class CreateCommentUsecase
     implements UsecaseWithParams<void, CreateCommentParams> {
   final ICommentRepository _commentRepository;
+  final TokenSharedPrefs tokenSharedPrefs;
 
-  CreateCommentUsecase({required ICommentRepository commentRepository})
+  CreateCommentUsecase({required this.tokenSharedPrefs, required ICommentRepository commentRepository})
       : _commentRepository = commentRepository;
 
   @override
-  Future<Either<Failure, void>> call(CreateCommentParams params) {
+  Future<Either<Failure, void>> call(CreateCommentParams params) async {
+    final userRef = await tokenSharedPrefs.getUserId();
+       return userRef.fold((l) {
+      return Left(l);
+    }, (r) async {
     return _commentRepository.createComment(
-      CommentEntity(comment: params.comment, listing: params.listing, user: params.user),
+      CommentEntity(comment: params.comment, listing: params.listing, user: r),
     );
-  }
+  });
 }
+    }

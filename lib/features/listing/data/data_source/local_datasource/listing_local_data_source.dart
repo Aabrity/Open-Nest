@@ -46,4 +46,10 @@ class ListingLocalDataSource implements IListingDataSource {
     // TODO: implement updateListing
     throw UnimplementedError();
   }
+  
+  @override
+  Future<List<ListingEntity>> getUserListing(String userRef) {
+    // TODO: implement getUserListing
+    throw UnimplementedError();
+  }
 }

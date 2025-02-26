@@ -5,6 +5,7 @@ import 'package:open_nest/features/listing/domain/entity/listing_entity.dart';
 import 'package:open_nest/features/listing/domain/use_case/create_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/delete_listing_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/get_all_listing_usecase.dart';
+import 'package:open_nest/features/listing/domain/use_case/get_listing_by_id_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/update_Usecase.dart';
 
 part 'listing_event.dart';
@@ -15,23 +16,39 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
   final CreateListingUsecase _createListingUsecase;
   final DeleteListingUsecase _deleteListingUsecase;
   final UpdateListingUsecase _updateListingUsecase;
+  final GetUserListingUsecase _getUserListingUsecase;
   ListingBloc({
     required GetAllListingUsecase getAllListingUsecase,
     required CreateListingUsecase createListingUsecase,
     required DeleteListingUsecase deleteListingUsecase,
     required UpdateListingUsecase updateListingUsecase,
+    required GetUserListingUsecase getUserListingUsecase,
   })  : _getAllListingUsecase = getAllListingUsecase,
         _createListingUsecase = createListingUsecase,
         _deleteListingUsecase = deleteListingUsecase,
         _updateListingUsecase = updateListingUsecase,
+        _getUserListingUsecase = getUserListingUsecase,
         super(ListingState.initial()) 
         {
     on<ListingLoad>(_onListingLoad);
     on<CreateListing>(_onCreateListing);
     on<DeleteListing>(_onDeleteListing);
-      on<UpdateListing>(_onUpdateListing);
+    on<UpdateListing>(_onUpdateListing);
+    on<ListingLoadAll>(_onListingLoadAll);
 
-    add(ListingLoad());
+    add(ListingLoadAll());
+  }
+ Future<void> _onListingLoadAll(
+    ListingLoadAll event,
+    Emitter<ListingState> emit,
+  ) async {
+    emit(state.copyWith(isLoading: true));
+    final result = await _getAllListingUsecase();
+    result.fold(
+      (failure) =>
+          emit(state.copyWith(isLoading: false, error: failure.message)),
+      (listings) => emit(state.copyWith(isLoading: false, listings: listings)),
+    );
   }
 
   Future<void> _onListingLoad(
@@ -41,7 +58,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
     // debugPrint(event.listing)
     
     emit(state.copyWith(isLoading: true));
-    final result = await _getAllListingUsecase();
+    final result = await _getUserListingUsecase();
     
     result.fold(
       (failure) =>
@@ -249,7 +266,6 @@ Future<void> _onUpdateListing(
   );
 }
 }
-
 
 
 

@@ -49,4 +49,10 @@ class ListingLocalRepository implements IListingRepository {
     // TODO: implement updateListing
     throw UnimplementedError();
   }
+  
+  @override
+  Future<Either<Failure, List<ListingEntity>>> getUserListing(String userRef) {
+    // TODO: implement getUserListing
+    throw UnimplementedError();
+  }
 }

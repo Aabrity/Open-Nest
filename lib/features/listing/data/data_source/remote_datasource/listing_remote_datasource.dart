@@ -111,4 +111,28 @@ Future<Either<Failure, void>> updateListing(String id, ListingEntity updatedList
     }
 }
 
-}
+
+ @override
+  Future<List<ListingEntity>> getUserListing(String userRef) async {
+    try {
+     var response = await _dio.get(ApiEndpoints.getUserListing + userRef);
+     
+      if (response.statusCode == 200) {
+        // Convert API response to DTO
+        var commentDTO = GetAllListingDTO.fromJson(response.data);
+
+         debugPrint("remote data: ${response.data}");
+        // Convert DTO to Entity
+        return ListingApiModel.toEntityList(commentDTO.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+
+}}
+
+
