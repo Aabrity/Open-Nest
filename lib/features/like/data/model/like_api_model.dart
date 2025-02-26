@@ -9,10 +9,12 @@ class LikeApiModel extends Equatable {
   @JsonKey(name: '_id')
   final String? id;
   final String listing; 
+  final String user;
 
   const LikeApiModel({
     this.id,
     required this.listing,
+    required this.user,
   });
 
   factory LikeApiModel.fromJson(Map<String, dynamic> json) =>
@@ -25,6 +27,7 @@ class LikeApiModel extends Equatable {
     return LikeEntity(
       likeId: id, 
       listing: listing, 
+      user: user,
     );
   }
 
@@ -33,6 +36,7 @@ class LikeApiModel extends Equatable {
     return LikeApiModel(
       id: entity.likeId,
       listing: entity.listing,
+      user: entity.user,
     );
   }
 
@@ -41,5 +45,5 @@ class LikeApiModel extends Equatable {
       models.map((model) => model.toEntity()).toList();
 
   @override
-  List<Object?> get props => [id, listing];
+  List<Object?> get props => [id, listing, user];
 }

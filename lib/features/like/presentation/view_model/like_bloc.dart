@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:open_nest/features/like/domain/entity/like_entity.dart';
-import 'package:open_nest/features/like/domain/use_case/create_course_usecase.dart';
+import 'package:open_nest/features/like/domain/use_case/create_like_usecase.dart';
 
 import 'package:open_nest/features/like/domain/use_case/delete_like_usecase.dart';
 import 'package:open_nest/features/like/domain/use_case/get_all_course_usecase.dart';

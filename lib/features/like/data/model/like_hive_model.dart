@@ -14,17 +14,22 @@ class LikeHiveModel extends Equatable {
   @HiveField(1)
   final String listing;
 
+  @HiveField(2)
+  final String user;
+
 
 
   LikeHiveModel({
     String? likeId,
     required this.listing,
+    required this.user,
   }) : likeId = likeId ?? const Uuid().v4();
 
   // Initial Constructor
   const LikeHiveModel.initial()
       : likeId = '',
-        listing = '';
+        listing = '',
+        user = '';
 
 
   // From Entity
@@ -32,6 +37,7 @@ class LikeHiveModel extends Equatable {
     return LikeHiveModel(
       likeId: entity.likeId ?? const Uuid().v4(),
       listing: entity.listing,
+      user:  entity.user,
     );
   }
 
@@ -39,7 +45,8 @@ class LikeHiveModel extends Equatable {
   LikeEntity toEntity() {
     return LikeEntity(
       likeId: likeId,
-      listing: listing
+      listing: listing,
+      user: user,
     );
   }
 
@@ -54,5 +61,5 @@ class LikeHiveModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [likeId, listing];
+  List<Object?> get props => [likeId, listing, user];
 }

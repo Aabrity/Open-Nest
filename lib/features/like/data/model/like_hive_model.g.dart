@@ -19,17 +19,20 @@ class LikeHiveModelAdapter extends TypeAdapter<LikeHiveModel> {
     return LikeHiveModel(
       likeId: fields[0] as String?,
       listing: fields[1] as String,
+      user: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, LikeHiveModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.likeId)
       ..writeByte(1)
-      ..write(obj.listing);
+      ..write(obj.listing)
+      ..writeByte(2)
+      ..write(obj.user);
   }
 
   @override
