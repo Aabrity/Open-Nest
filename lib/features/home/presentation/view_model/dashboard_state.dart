@@ -37,16 +37,9 @@ class DashboardState extends Equatable {
         BlocProvider<ListingBloc>(
           create: (context) => getIt<ListingBloc>(),
         ),
-        //  BlocProvider<CommentBloc>(
-        //   create: (context) => getIt<CommentBloc>(),
-        // ),
       ],
       child: ListingPage(),
     ),
-        //  BlocProvider(
-        //   create: (context) => getIt<ListingBloc>(),
-        //   child: HomeScreen(),
-        // ),
          BlocProvider(
           create: (context) => getIt<ListingBloc>(),
           child: SearchListingView(),
