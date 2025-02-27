@@ -5,6 +5,7 @@ import 'package:open_nest/features/like/domain/use_case/create_like_usecase.dart
 
 import 'package:open_nest/features/like/domain/use_case/delete_like_usecase.dart';
 import 'package:open_nest/features/like/domain/use_case/get_all_course_usecase.dart';
+import 'package:open_nest/features/like/domain/use_case/get_likes_by_id.dart';
 
 
 part 'like_event.dart';
@@ -14,19 +15,22 @@ class LikeBloc extends Bloc<LikeEvent, LikeState> {
   final GetAllLikeUsecase _getAllLikeUsecase;
   final CreateLikeUsecase _createLikeUsecase;
   final DeleteLikeUsecase _deleteLikeUsecase;
+  final GetLikesByListingUsecase _getLikesByListingUsecase;
   LikeBloc({
     required GetAllLikeUsecase getAllLikeUsecase,
     required CreateLikeUsecase createLikeUsecase,
     required DeleteLikeUsecase deleteLikeUsecase,
+    required GetLikesByListingUsecase getLikesByListingUsecase,
   })  : _getAllLikeUsecase = getAllLikeUsecase,
         _createLikeUsecase = createLikeUsecase,
         _deleteLikeUsecase = deleteLikeUsecase,
+        _getLikesByListingUsecase = getLikesByListingUsecase,
         super(LikeState.initial()) {
     on<LikeLoad>(_onLikeLoad);
     on<CreateLike>(_onCreateLike);
     on<DeleteLike>(_onDeleteLike);
 
-    add(LikeLoad());
+    add(LikeLoad(listingId: ''));
   }
 
   Future<void> _onLikeLoad(
@@ -34,11 +38,11 @@ class LikeBloc extends Bloc<LikeEvent, LikeState> {
     Emitter<LikeState> emit,
   ) async {
     emit(state.copyWith(isLoading: true));
-    final result = await _getAllLikeUsecase();
+    final result = await _getLikesByListingUsecase(GetLikesByListingParams(listingId: event.listingId!));
     result.fold(
       (failure) =>
           emit(state.copyWith(isLoading: false, error: failure.message)),
-      (likes) => emit(state.copyWith(isLoading: false, likes: likes)),
+      (likes) => emit(state.copyWith(isLoading: false, likes: likes, listingId: event.listingId,)),
     );
   }
 
@@ -54,7 +58,7 @@ class LikeBloc extends Bloc<LikeEvent, LikeState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        add(LikeLoad());
+        add(LikeLoad( listingId:event.listing));
       },
     );
   }
@@ -70,7 +74,7 @@ class LikeBloc extends Bloc<LikeEvent, LikeState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        add(LikeLoad());
+        add(LikeLoad(listingId:event.listingId));
       },
     );
   }

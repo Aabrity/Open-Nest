@@ -42,4 +42,10 @@ class LikeLocalRepository implements ILikeRepository {
       return Future.value(Left(LocalDatabaseFailure(message: e.toString())));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<LikeEntity>>> getListingLike(String listing) {
+    // TODO: implement getListingLike
+    throw UnimplementedError();
+  }
 }

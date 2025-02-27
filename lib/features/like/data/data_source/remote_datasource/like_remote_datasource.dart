@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:open_nest/app/constants/api_endpoints.dart';
 import 'package:open_nest/features/like/data/data_source/like_data_source.dart';
 import 'package:open_nest/features/like/data/dto/get_all_like_dto.dart';
@@ -74,5 +75,30 @@ class LikeRemoteDataSource implements ILikeDataSource {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+
+
+  @override
+  Future<List<LikeEntity>> getListingLike(String listing) async {
+    try {
+     var response = await _dio.get(ApiEndpoints.getAllListingLike + listing);
+     
+      if (response.statusCode == 200) {
+        // Convert API response to DTO
+        var likeDTO = GetAllLikeDTO.fromJson(response.data);
+
+         debugPrint("remote data: ${response.data}");
+        // Convert DTO to Entity
+        return LikeApiModel.toEntityList(likeDTO.data);
+      } else {
+        throw Exception(response.statusMessage);
+      }
+    } on DioException catch (e) {
+      throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+
   }
 }

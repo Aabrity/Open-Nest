@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 // import 'package:open_nest/features/listing/presentation/bloc/listing_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:open_nest/app/di/di.dart';
+import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
 import 'package:open_nest/features/listing/presentation/view/detail_view.dart';
 import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
 import 'dart:typed_data';
@@ -105,7 +107,9 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailPage(listing: listing),
+                        builder: (context) =>    BlocProvider.value(
+                                            value: getIt<LikeBloc>(),
+                                            child: DetailPage(listing: listing),),
                       ),
                     );
                   },

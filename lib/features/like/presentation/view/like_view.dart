@@ -62,7 +62,7 @@ class LikeView extends StatelessWidget {
                               icon: Icon(Icons.delete),
                               onPressed: () {
                                 context.read<LikeBloc>().add(
-                                      DeleteLike(id: like.likeId!),
+                                      DeleteLike(id: like.likeId!,  listingId: like.listing),
                                     );
                               },
                             ),

@@ -1,22 +1,88 @@
+// import 'package:equatable/equatable.dart';
+
+// abstract class UserState extends Equatable {
+//   const UserState();
+
+//   @override
+//   List<Object?> get props => [];
+// }
+
+// class UserInitial extends UserState {}
+
+// class UserLoading extends UserState {}
+
+// class UserLoaded extends UserState {
+//   final String username;
+//   final String email;
+//   final String userId;
+//   final String avatarBase64;
+//   final bool isAdmin;
+//   final bool subscription;
+
+//   const UserLoaded({
+//     required this.username,
+//     required this.email,
+//     required this.userId,
+//     required this.avatarBase64,
+//     required this.isAdmin,
+//     required this.subscription,
+//   });
+
+//   @override
+//   List<Object?> get props => [username, email, userId, avatarBase64, isAdmin, subscription];
+// }
+
+// class UserError extends UserState {
+//   final String message;
+
+//   const UserError(this.message);
+
+//   @override
+//   List<Object?> get props => [message];
+// }
 
 
-import 'package:open_nest/core/error/failure.dart';
-import 'package:open_nest/features/auth/domain/entity/auth_entity.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class ProfileState {}
+abstract class UserState extends Equatable {
+  const UserState();
 
-class ProfileInitial extends ProfileState {}
-
-class ProfileLoading extends ProfileState {}
-
-class ProfileLoaded extends ProfileState {
-  final AuthEntity user;
-
-  ProfileLoaded(this.user);
+  @override
+  List<Object?> get props => [];
 }
 
-class ProfileError extends ProfileState {
-  final Failure failure;
+class UserInitial extends UserState {}
 
-  ProfileError(this.failure);
+class UserLoading extends UserState {}
+
+class UserLoaded extends UserState {
+  final String username;
+  final String email;
+  final String userId;
+  final String avatarBase64;
+  final bool isAdmin;
+  final bool subscription;
+
+  const UserLoaded({
+    required this.username,
+    required this.email,
+    required this.userId,
+    required this.avatarBase64,
+    required this.isAdmin,
+    required this.subscription,
+  });
+
+  @override
+  List<Object?> get props => [username, email, userId, avatarBase64, isAdmin, subscription];
 }
+
+class UserError extends UserState {
+  final String message;
+
+  const UserError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class UserUpdated extends UserState {}

@@ -5,4 +5,5 @@ abstract interface class ILikeDataSource {
   Future<List<LikeEntity>> getLike();
   Future<void> createLike(LikeEntity listing);
   Future<void> deleteLike(String id, String? token);
+  Future<List<LikeEntity>> getListingLike(String listing);
 }

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/like/data/data_source/remote_datasource/like_remote_datasource.dart';
 import 'package:open_nest/features/like/domain/entity/like_entity.dart';
@@ -42,4 +43,17 @@ class LikeRemoteRepository implements ILikeRepository {
       return Left(ApiFailure(message: e.toString()));
     }
   }
+  
+  @override
+  Future<Either<Failure, List<LikeEntity>>> getListingLike(String listing) async{
+    try {
+      final likes = await _likeRemoteDataSource.getListingLike(listing);
+       debugPrint("Comments from Repository: $likes");
+      return Right(likes);
+    } catch (e) {
+      return Left(ApiFailure(message: e.toString()));
+    }
+  }
 }
+
+

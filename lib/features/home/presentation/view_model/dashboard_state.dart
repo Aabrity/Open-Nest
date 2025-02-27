@@ -57,7 +57,7 @@ class DashboardState extends Equatable {
         ),
         
          BlocProvider(
-          create: (context) => getIt<ProfileBloc>(),
+          create: (context) => getIt<UserBloc>(),
           child: ProfilePage(),
         ),
       

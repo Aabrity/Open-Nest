@@ -1,5 +1,10 @@
 import 'dart:io';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:open_nest/core/error/failure.dart';
+import 'package:open_nest/features/auth/data/dto/get_user_DTO.dart';
+import 'package:open_nest/features/auth/data/model/auth_api_model.dart';
 import '../../../../../app/constants/api_endpoints.dart';
 import '../../../domain/entity/auth_entity.dart';
 import '../auth_data_source.dart';
@@ -36,11 +41,63 @@ class AuthRemoteDataSource implements IAuthDataSource {
     }
   }
 
+  // @override
+  // Future<AuthEntity> getCurrentUser( String id, String? token,) async {
+  // try {
+  //    var response = await _dio.get(ApiEndpoints.getMe + id, options: Options(
+  //         headers: {
+  //           'Authorization': 'Bearer $token',
+  //         },
+  //       ),);
+     
+  //     if (response.statusCode == 200) {
+  //       // Convert API response to DTO
+  //       var userDTO = GetUserDTO.fromJson(response.data);
+  //       // var authApiModel = AuthApiModel.fromJson(userDTO.data); 
+  //        debugPrint("remote data: ${response.data}");
+  //       // Convert DTO to Entity
+  //       var authy = userDTO.data;
+  //       return AuthApiModel.toEntity();
+  //     } else {
+  //       throw Exception(response.statusMessage);
+  //     }
+  //   } on DioException catch (e) {
+  //     throw Exception(e);
+  //   } catch (e) {
+  //     throw Exception(e);
+  //   }
+  // }
+
   @override
-  Future<AuthEntity> getCurrentUser(String token) {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+Future<AuthEntity> getCurrentUser(String id, String? token) async {
+  try {
+    var response = await _dio.get(
+      ApiEndpoints.getMe + id,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      // debugPrint("remote data: ${response.data}");
+
+      var userDTO = GetUserDTO.fromJson(response.data);
+      // debugPrint("___________________________---------------remote data: $userDTO");
+       var t = userDTO.data.toEntity();
+      //  debugPrint("________________tttttttttttttttttttttttttttttttttt___________---------------remote data: $t");
+      return t; // FIXED: using instance method
+    } else {
+      throw Exception('Failed to fetch user: ${response.statusMessage}');
+    }
+  } on DioException catch (e) {
+    throw Exception('Dio error: ${e.message}');
+  } catch (e) {
+    throw Exception('Unexpected error: $e');
   }
+}
+
 
   @override
   Future<String> loginUser(String username, String password) async {
@@ -98,4 +155,38 @@ class AuthRemoteDataSource implements IAuthDataSource {
       throw Exception(e);
     }
   }
+
+
+@override
+Future<Either<Failure, void>> updateUser(String id, AuthEntity updatedUser, String token) async {
+  try {
+    // Convert ListingEntity to API model
+    var authApiModel = AuthApiModel.fromEntity(updatedUser);
+
+    // Send PUT request to update listing
+    var response = await _dio.put(
+      (ApiEndpoints.updateUser + id), // Ensure API endpoint is correct
+      data: authApiModel.toJson(),
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return const Right(null); 
+    } else {
+       throw Exception(response.statusMessage);
+    }
+  } on DioException catch (e) {
+   throw Exception(e);
+    } catch (e) {
+      throw Exception(e);
+    }
+}
+
+
+
 }

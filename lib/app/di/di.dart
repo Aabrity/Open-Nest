@@ -8,6 +8,7 @@ import 'package:open_nest/features/auth/data/repository/auth_local_repository/au
 import 'package:open_nest/features/auth/domain/use_case/get_Current_user.dart';
 import 'package:open_nest/features/auth/domain/use_case/login_usecase.dart';
 import 'package:open_nest/features/auth/domain/use_case/register_user_usecase.dart';
+import 'package:open_nest/features/auth/domain/use_case/update_user.dart';
 import 'package:open_nest/features/auth/presentation/view_model/login/login_bloc.dart';
 import 'package:open_nest/features/auth/presentation/view_model/profile_bloc.dart';
 import 'package:open_nest/features/auth/presentation/view_model/signup/register_bloc.dart';
@@ -26,9 +27,10 @@ import 'package:open_nest/features/like/data/data_source/local_datasource/like_l
 import 'package:open_nest/features/like/data/data_source/remote_datasource/like_remote_datasource.dart';
 import 'package:open_nest/features/like/data/repository/like_local_repository.dart';
 import 'package:open_nest/features/like/data/repository/like_remote_repository.dart';
-import 'package:open_nest/features/like/domain/use_case/create_course_usecase.dart';
+import 'package:open_nest/features/like/domain/use_case/create_like_usecase.dart';
 import 'package:open_nest/features/like/domain/use_case/delete_like_usecase.dart';
 import 'package:open_nest/features/like/domain/use_case/get_all_course_usecase.dart';
+import 'package:open_nest/features/like/domain/use_case/get_likes_by_id.dart';
 import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
 import 'package:open_nest/features/listing/data/data_source/local_datasource/listing_local_data_source.dart';
 import 'package:open_nest/features/listing/data/data_source/remote_datasource/listing_remote_datasource.dart';
@@ -165,11 +167,14 @@ _initLikeDependencies() async {
   // =========================== Usecases ===========================
 
   getIt.registerLazySingleton<CreateLikeUsecase>(
-    () => CreateLikeUsecase(likeRepository: getIt<LikeRemoteRepository>()),
+    () => CreateLikeUsecase(likeRepository: getIt<LikeRemoteRepository>(),tokenSharedPrefs: getIt<TokenSharedPrefs>(),),
   );
 
   getIt.registerLazySingleton<GetAllLikeUsecase>(
     () => GetAllLikeUsecase(likeRepository: getIt<LikeRemoteRepository>()),
+  );
+getIt.registerLazySingleton<GetLikesByListingUsecase>(
+    () => GetLikesByListingUsecase(likeRepository: getIt<LikeRemoteRepository>()),
   );
 
   getIt.registerLazySingleton<DeleteLikeUsecase>(
@@ -184,6 +189,7 @@ _initLikeDependencies() async {
     () => LikeBloc(getAllLikeUsecase:  getIt<GetAllLikeUsecase>(), 
     createLikeUsecase: getIt<CreateLikeUsecase>(),
      deleteLikeUsecase: getIt<DeleteLikeUsecase>(),
+     getLikesByListingUsecase: getIt<GetLikesByListingUsecase>(),
       
     ),
   );
@@ -310,7 +316,16 @@ _initLoginDependencies() async {
      getIt<TokenSharedPrefs>(),
     ),
   );
-
+  getIt.registerLazySingleton<FetchCurrentUserUseCase>(
+    () => FetchCurrentUserUseCase( tokenSharedPrefs:  getIt<TokenSharedPrefs>(), repository: getIt<AuthRemoteRepository>(),
+     
+    ),
+  );
+ getIt.registerLazySingleton<UpdateUserUsecase>(
+    () => UpdateUserUsecase( tokenSharedPrefs:  getIt<TokenSharedPrefs>(), authRepository: getIt<AuthRemoteRepository>(),
+     
+    ),
+  );
   // Register Login Bloc
   getIt.registerFactory<LoginBloc>(
     () => LoginBloc(
@@ -320,8 +335,8 @@ _initLoginDependencies() async {
     ),
   );
 
-   getIt.registerFactory<ProfileBloc>(
-    () => ProfileBloc(fetchCurrentUserUseCase: getIt<FetchCurrentUserUseCase>(),
+   getIt.registerFactory<UserBloc>(
+    () => UserBloc(fetchCurrentUserUseCase: getIt<FetchCurrentUserUseCase>(), updateUserUsecase: getIt<UpdateUserUsecase>(),
     
     ),
   );

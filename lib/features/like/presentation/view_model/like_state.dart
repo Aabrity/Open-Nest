@@ -4,11 +4,13 @@ class LikeState extends Equatable {
   final bool isLoading;
   final List<LikeEntity> likes;
   final String error;
+  final String? listingId; 
 
   const LikeState({
     required this.isLoading,
     required this.likes,
     required this.error,
+    this.listingId,
   });
 
   factory LikeState.initial() {
@@ -16,6 +18,7 @@ class LikeState extends Equatable {
       isLoading: false,
       likes: [],
       error: '',
+      listingId: null,
     );
   }
 
@@ -23,14 +26,16 @@ class LikeState extends Equatable {
     bool? isLoading,
     List<LikeEntity>? likes,
     String? error,
+    String? listingId,
   }) {
     return LikeState(
       isLoading: isLoading ?? this.isLoading,
       likes: likes ?? this.likes,
       error: error ?? this.error,
+      listingId: listingId ?? this.listingId,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, likes, error];
+  List<Object?> get props => [isLoading, likes, error, listingId];
 }

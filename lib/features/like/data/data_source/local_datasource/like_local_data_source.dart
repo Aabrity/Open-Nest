@@ -39,4 +39,10 @@ class LikeLocalDataSource implements ILikeDataSource {
       throw LocalDatabaseFailure(message: e.toString());
     }
   }
+  
+  @override
+  Future<List<LikeEntity>> getListingLike(String listing) {
+    // TODO: implement getListingLike
+    throw UnimplementedError();
+  }
 }
