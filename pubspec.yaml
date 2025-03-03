@@ -61,7 +61,7 @@ dependencies:
   # proximity_sensor: ^1.3.7
   screen_brightness: ^2.1.1
   wakelock_plus: ^1.2.10
-  proximity_sensor: ^1.3.7
+  # proximity_sensor: ^1.3.7
   # wakelock: ^0.6.2
 
 dev_dependencies:

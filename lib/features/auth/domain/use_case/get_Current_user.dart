@@ -13,19 +13,6 @@ class FetchCurrentUserUseCase implements UsecaseWithoutParams<AuthEntity> {
 
   FetchCurrentUserUseCase( {required this.repository,  required this.tokenSharedPrefs,});
 
-//   @override
-//   Future<Either<Failure, AuthEntity>> call() async {
-//      final token = await tokenSharedPrefs.getToken();
-//      final userRef = await tokenSharedPrefs.getUserId();
-//        return userRef.fold((l) {
-//       return Left(l);
-//     }, (r) async {
-//     return token.fold(
-//       (failure) => Left(failure),
-//       (tokenValue) async => repository.getCurrentUser(r, tokenValue)
-//       );
-//   });
-// }
 @override
 Future<Either<Failure, AuthEntity>> call() async {
   debugPrint('Fetching token from shared preferences...');
