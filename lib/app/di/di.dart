@@ -6,6 +6,7 @@ import 'package:open_nest/core/network/hive_service.dart';
 import 'package:open_nest/features/auth/data/data_source/local_data_source/auth_local_datasource.dart';
 import 'package:open_nest/features/auth/data/repository/auth_local_repository/auth_local_repository.dart';
 import 'package:open_nest/features/auth/domain/use_case/get_Current_user.dart';
+import 'package:open_nest/features/auth/domain/use_case/get_user_by_id_for_comment.dart';
 import 'package:open_nest/features/auth/domain/use_case/login_usecase.dart';
 import 'package:open_nest/features/auth/domain/use_case/register_user_usecase.dart';
 import 'package:open_nest/features/auth/domain/use_case/update_user.dart';
@@ -329,6 +330,11 @@ _initLoginDependencies() async {
   );
  getIt.registerLazySingleton<UpdateUserUsecase>(
     () => UpdateUserUsecase( tokenSharedPrefs:  getIt<TokenSharedPrefs>(), authRepository: getIt<AuthRemoteRepository>(),
+     
+    ),
+  );
+   getIt.registerLazySingleton<FetchUsernameByIdUseCase>(
+    () => FetchUsernameByIdUseCase( tokenSharedPrefs:  getIt<TokenSharedPrefs>(), repository:  getIt<AuthRemoteRepository>(),  
      
     ),
   );
