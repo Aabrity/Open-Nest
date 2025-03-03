@@ -53,11 +53,11 @@ class OnboardingScreen extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0.0),
                           
-                            color: Colors.blueGrey,
+                            color: Colors.white,
                             
                           
                           image: const DecorationImage(
-                            image: AssetImage('assets/images/logo.png'),
+                            image: AssetImage('assets/images/profile.png'),
                             fit: BoxFit.cover,
                           ),
                         ),

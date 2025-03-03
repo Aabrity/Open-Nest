@@ -30,7 +30,7 @@ class _SplashViewState extends State<SplashView> {
                 SizedBox(
                   height: 200,
                   width: 200,
-                  child: Image.asset('assets/images/logo.png'),
+                  child: Image.asset('assets/images/profile.png'),
                 ),
                 const Text(
                   'RealEsate Listings',
@@ -41,7 +41,7 @@ class _SplashViewState extends State<SplashView> {
                 const SizedBox(height: 10),
                 const CircularProgressIndicator(),
                 const SizedBox(height: 10),
-                const Text('APP VERSION 1.0')
+                // const Text('APP VERSION 1.0')
               ],
             ),
           ),

@@ -876,14 +876,24 @@ class _DashboardViewState extends State<DashboardView> {
           backgroundColor: AppTheme.backgroundColor,
           appBar: AppBar(
             elevation: 0,
-            backgroundColor: AppTheme.appBarBackgroundColor,
+            backgroundColor: Colors.white,
             toolbarHeight: screenHeight * 0.12,
             title: Row(
               children: [
-                CircleAvatar(
-                  radius: screenHeight * 0.04,
-                  backgroundImage: const AssetImage('assets/images/profile.png'),
-                ),
+               Container(
+  width: screenHeight * 0.08, // Diameter of the circle
+  height: screenHeight * 0.08,
+  decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    border: Border.all(color: Colors.orange, width: 2.5),
+  ),
+  child: CircleAvatar(
+    radius: screenHeight * 0.04,
+    backgroundColor: Colors.white,
+    backgroundImage: const AssetImage('assets/images/profile.png'),
+  ),
+),
+
                 SizedBox(width: screenWidth * 0.03),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -896,7 +906,7 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                     Text(
-                      'Open-Nest',
+                      '      Open-Nest',
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,
