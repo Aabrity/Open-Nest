@@ -69,34 +69,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
     );
   }
 
-  // Future<void> _onCreateListing(
-  //   CreateListing event,
-  //   Emitter<ListingState> emit,
-  // ) async {
-  //   emit(state.copyWith(isLoading: true));
-  //   final result = await _createListingUsecase(CreateListingParams(
-  //     name: event.name,
-  //     description: event.description,
-  //     address: event.address,
-  //     regularPrice: event.regularPrice,
-  //     discountedPrice: event.discountedPrice,
-  //     bathrooms: event.bathrooms,
-  //     bedrooms: event.bedrooms,
-  //     furnished: event.furnished,
-  //     parking: event.parking,
-  //     type: event.type,
-  //     offer: event.offer,
-  //     imageUrls: event.imageUrls,
-  //   ));
-  //   result.fold(
-  //     (failure) =>
-  //         emit(state.copyWith(isLoading: false, error: failure.message)),
-  //     (_) {
-  //       emit(state.copyWith(isLoading: false));
-  //       add(ListingLoad());
-  //     },
-  //   );
-  // }
+
 
   Future<void> _onCreateListing(
   CreateListing event,
@@ -153,7 +126,7 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
           ],
         ),
       );
-      add(ListingLoad()); // Reload the listings after creation
+      add(ListingLoadAll()); // Reload the listings after creation
     },
   );
 }
@@ -170,41 +143,11 @@ class ListingBloc extends Bloc<ListingEvent, ListingState> {
           emit(state.copyWith(isLoading: false, error: failure.message)),
       (_) {
         emit(state.copyWith(isLoading: false));
-        add(ListingLoad());
+        add(ListingLoadAll());
       },
     );
   }
 
-//   Future<void> _onUpdateListing(
-//   UpdateListing event,
-//   Emitter<ListingState> emit,
-// ) async {
-//   emit(state.copyWith(isLoading: true));
-//   final result = await _updateListingUsecase(UpdateListingParams(
-//     id: event.id,
-//     name: event.name,
-//     description: event.description,
-//     address: event.address,
-//     regularPrice: event.regularPrice,
-//     discountedPrice: event.discountedPrice,
-//     bathrooms: event.bathrooms,
-//     bedrooms: event.bedrooms,
-//     furnished: event.furnished,
-//     parking: event.parking,
-//     type: event.type,
-//     offer: event.offer,
-//     imageUrls: event.imageUrls,
-//   ));
-  
-//   result.fold(
-//     (failure) =>
-//         emit(state.copyWith(isLoading: false, error: failure.message)),
-//     (_) {
-//       emit(state.copyWith(isLoading: false));
-//       add(ListingLoad()); // Reload the updated listings after update
-//     },
-//   );
-// }
 Future<void> _onUpdateListing(
   UpdateListing event,
   Emitter<ListingState> emit,
@@ -261,7 +204,7 @@ Future<void> _onUpdateListing(
           ],
         ),
       );
-      add(ListingLoad()); // Reload the updated listings after update
+      add(ListingLoadAll()); // Reload the updated listings after update
     },
   );
 }

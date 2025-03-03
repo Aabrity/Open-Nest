@@ -42,6 +42,7 @@ import 'package:open_nest/features/listing/domain/use_case/get_all_listing_useca
 import 'package:open_nest/features/listing/domain/use_case/get_listing_by_id_usecase.dart';
 import 'package:open_nest/features/listing/domain/use_case/update_Usecase.dart';
 import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
+import 'package:open_nest/features/listing/presentation/view_model/add%20listings/userlisting/user_listing_bloc.dart';
 import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_cubit.dart';
 // import 'package:open_nest/features/onboarding/presentation/view_model/onboarding_bloc.dart';
 import 'package:open_nest/features/splash/presentation/view_model/splash_cubit.dart';
@@ -135,6 +136,11 @@ _initListingDependencies() async {
     createListingUsecase: getIt<CreateListingUsecase>(),
      deleteListingUsecase: getIt<DeleteListingUsecase>(), 
      updateListingUsecase: getIt<UpdateListingUsecase>(), getUserListingUsecase: getIt<GetUserListingUsecase>(),
+      
+    ),
+  );
+   getIt.registerFactory<UserListingBloc>(
+    () => UserListingBloc( getUserListingUsecase: getIt<GetUserListingUsecase>(),
       
     ),
   );

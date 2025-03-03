@@ -15,6 +15,7 @@ import 'package:open_nest/features/listing/presentation/view/listing_view.dart';
 import 'package:open_nest/features/listing/presentation/view_model/add%20listings/listing_bloc.dart';
 
 import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
+import 'package:open_nest/features/listing/presentation/view_model/add%20listings/userlisting/user_listing_bloc.dart';
 
 
 class DashboardState extends Equatable {
@@ -44,8 +45,15 @@ class DashboardState extends Equatable {
           create: (context) => getIt<ListingBloc>(),
           child: SearchListingView(),
         ),
-         BlocProvider(
+         MultiBlocProvider(
+      providers: [
+        BlocProvider<ListingBloc>(
           create: (context) => getIt<ListingBloc>(),
+        ),
+        BlocProvider<UserListingBloc>(
+          create: (context) => getIt<UserListingBloc>(),
+        ),
+      ],
           child: ListingView(),
         ),
         
