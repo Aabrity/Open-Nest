@@ -174,7 +174,7 @@ _initLikeDependencies() async {
     () => GetAllLikeUsecase(likeRepository: getIt<LikeRemoteRepository>()),
   );
 getIt.registerLazySingleton<GetLikesByListingUsecase>(
-    () => GetLikesByListingUsecase(likeRepository: getIt<LikeRemoteRepository>()),
+    () => GetLikesByListingUsecase(likeRepository: getIt<LikeRemoteRepository>(), tokenSharedPrefs:getIt<TokenSharedPrefs>(),),
   );
 
   getIt.registerLazySingleton<DeleteLikeUsecase>(
