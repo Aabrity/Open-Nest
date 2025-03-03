@@ -682,8 +682,17 @@ class DetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(listing.name),
-        backgroundColor: Colors.orange,
+        title: Text(
+  listing.name,
+  style: TextStyle(
+    fontWeight: FontWeight.bold, // Make the text bold
+    color: Colors.white, // Set the text color
+    fontStyle: FontStyle.italic, 
+  ),
+),
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.black, 
+        
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -750,7 +759,8 @@ class DetailPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),

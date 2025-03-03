@@ -230,7 +230,7 @@ _initCommentDependencies() async {
     () => GetAllCommentUsecase(commentRepository: getIt<CommentRemoteRepository>()),
   );
    getIt.registerLazySingleton<GetCommentsByListingUsecase>(
-    () => GetCommentsByListingUsecase(commentRepository: getIt<CommentRemoteRepository>()),
+    () => GetCommentsByListingUsecase(commentRepository: getIt<CommentRemoteRepository>(), tokenSharedPrefs: getIt<TokenSharedPrefs>()),
   );
 
   getIt.registerLazySingleton<DeleteCommentUsecase>(

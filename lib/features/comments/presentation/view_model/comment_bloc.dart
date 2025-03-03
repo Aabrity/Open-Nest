@@ -45,11 +45,15 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
         isLoading: false,
         error: failure.message,
       )),
-      (comments) => emit(state.copyWith(
+       (data) {
+        final (comments, userId) = data;
+        emit(state.copyWith(
         isLoading: false,
         comment: comments,
-        listingId: event.listingId, // Update the listingId in the state
-      )),
+        listingId: event.listingId, 
+        currentUserId: userId,
+      ));
+       },
     );
   }
 

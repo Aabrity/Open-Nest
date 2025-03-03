@@ -6,12 +6,14 @@ class CommentState extends Equatable {
   final List<CommentEntity> comment;
   final String error;
   final String? listingId; 
+  final String? currentUserId;
 
   const CommentState({
     required this.isLoading,
     required this.comment,
     required this.error,
     this.listingId,
+    this.currentUserId,
   });
 
   factory CommentState.initial() {
@@ -20,6 +22,7 @@ class CommentState extends Equatable {
       comment: [],
       error: '',
       listingId: null,
+      currentUserId: null,
     );
   }
 
@@ -28,15 +31,17 @@ class CommentState extends Equatable {
     List<CommentEntity>? comment,
     String? error,
     String? listingId,
+    String? currentUserId,
   }) {
     return CommentState(
       isLoading: isLoading ?? this.isLoading,
       comment: comment ?? this.comment,
       error: error ?? this.error,
       listingId: listingId ?? this.listingId,
+      currentUserId: currentUserId ?? this.currentUserId,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, comment, error, listingId];
+  List<Object?> get props => [isLoading, comment, error, listingId, currentUserId];
 }
