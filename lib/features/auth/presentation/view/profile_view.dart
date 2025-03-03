@@ -387,7 +387,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      ElevatedButton(
+                      _buildCurvedButton(
                         onPressed: () {
                           final updateParams = UpdateUserParams(
                             username: _usernameController.text,
@@ -397,7 +397,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           );
                           context.read<UserBloc>().add(UpdateUserEvent(updateParams));
                         },
-                        child: const Text('Update Profile'),
+                         label: 'Update Listing',
                       ),
                     ],
                   ),
@@ -418,6 +418,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -425,4 +427,33 @@ class _ProfilePageState extends State<ProfilePage> {
     _passwordController.dispose();
     super.dispose();
   }
+
+
+  
 }
+
+ Widget _buildCurvedButton({
+    required VoidCallback onPressed,
+    String? label,
+    IconData? icon,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null) Icon(icon, size: 20),
+          if (icon != null && label != null) const SizedBox(width: 8),
+          if (label != null) Text(label),
+        ],
+      ),
+    );
+  }
