@@ -1155,7 +1155,7 @@ class _EditListingViewState extends State<EditListingView> {
                 // Listing Type Dropdown
                 DropdownButtonFormField<String>(
                   value: type,
-                  items: ['Rent', 'Sale'].map((String typeOption) {
+                  items: ['rent', 'sale'].map((String typeOption) {
                     return DropdownMenuItem<String>(
                       value: typeOption,
                       child: Text(typeOption),
