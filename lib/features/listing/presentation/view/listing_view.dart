@@ -3,6 +3,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,9 +74,9 @@ class _ListingViewState extends State<ListingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Listing', style: TextStyle(color: Colors.white)),
+        title: const Text('Add Listing', style: TextStyle(color: Color.fromARGB(255, 111, 110, 110))),
         centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -325,72 +326,165 @@ class _ListingViewState extends State<ListingView> {
                 const SizedBox(height: 16),
 
                 // Listings List
-                BlocBuilder<UserListingBloc, UserListingState>(
-                  builder: (context, state) {
-                    if (state.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state.error != null) {
-                      return Center(child: Text(state.error!));
-                    } else if (state.listings.isEmpty) {
-                      return const Center(
-                        child: Text('No Listings Added Yet'),
-                      );
-                    } else {
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: state.listings.length,
-                        itemBuilder: (context, index) {
-                          return Card(
-                            elevation: 2,
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            child: ListTile(
-                              title: Text(state.listings[index].name),
-                              subtitle: Text(state.listings[index].type!),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                              IconButton(
-  icon: const Icon(Icons.edit),
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BlocProvider.value(
-          value: getIt<ListingBloc>(),
-          child: EditListingView(
-            listing: state.listings[index],
-          ),
-        ),
-      ),
-    ).then((_) {
-      // Reload listings when returning from EditListingView
-      context.read<UserListingBloc>().add(LoadUserListing(state.currentUserId!));
-    });
-  },
-),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete, color: Colors.red),
-                                    onPressed: ()  {
-                                      context.read<ListingBloc>().add(
-                                            DeleteListing(
-                                                id: state.listings[index].listingId!),
-                                          );
-                                      context.read<UserListingBloc>().add(LoadUserListing(state.currentUserId!)); 
-                                      context.read<UserListingBloc>().add(LoadUserListing(state.currentUserId!));
-                                      context.read<UserListingBloc>().add(LoadUserListing(state.currentUserId!));
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    }
-                  },
+        
+
+
+
+BlocBuilder<UserListingBloc, UserListingState>(
+  builder: (context, state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state.error != null) {
+      return Center(child: Text(state.error!));
+    } else if (state.listings.isEmpty) {
+      return const Center(
+        child: Text('No Listings Added Yet'),
+      );
+    } else {
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: state.listings.length,
+        itemBuilder: (context, index) {
+          final listing = state.listings[index];
+
+          /// Handle Base64 image decoding
+          Widget listingImage;
+          if (listing.imageUrls.isNotEmpty && listing.imageUrls[0].startsWith("data:image")) {
+            try {
+              String base64String = listing.imageUrls[0].split(',').last;
+              Uint8List imageBytes = base64Decode(base64String);
+
+              listingImage =  Container(
+  width: 100,
+  height: 100,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.orangeAccent, width: 2), // Black border
+    borderRadius: BorderRadius.circular(12), // Rounded corners
+  ),
+  child: Image.memory(
+    imageBytes,
+    width: 60,
+    height: 80,
+    fit: BoxFit.cover,
+  ),
+);
+            } catch (e) {
+              listingImage = Container(
+  width: 60,
+  height: 80,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.orangeAccent, width: 2), // Black border
+    borderRadius: BorderRadius.circular(12), // Rounded corners
+  ),
+  child: Image.asset(
+    'assets/placeholder.jpg',
+    width: 60,
+    height: 80,
+    fit: BoxFit.cover,
+  ),
+);
+            }
+          } else {
+            listingImage =  Container(
+  width: 60,
+  height: 80,
+  decoration: BoxDecoration(
+    border: Border.all(color: Colors.orangeAccent, width: 2), // Black border
+    borderRadius: BorderRadius.circular(12), // Rounded corners
+  ),
+  child: Image.asset(
+    'assets/placeholder.jpg',
+    width: 60,
+    height: 80,
+    fit: BoxFit.cover,
+  ),
+);
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                 side: BorderSide(color: Colors.white, width: 1.8),
+                
+              ),
+              elevation: 5,
+              shadowColor: Colors.orangeAccent,
+              color: Colors.white,
+              
+              child: ListTile(
+                
+                contentPadding: const EdgeInsets.all(10),
+                leading: ClipRRect(
+                  
+                  borderRadius: BorderRadius.circular(12),
+                  child: listingImage,
                 ),
-              ],
+                title: Text(
+                  listing.name,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("${listing.address}, ${listing.type}"),
+                    const SizedBox(height: 4),
+                    Text(
+                      "NRP ${listing.regularPrice}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider.value(
+                              value: getIt<ListingBloc>(),
+                              child: EditListingView(listing: listing),
+                            ),
+                          ),
+                        ).then((_) {
+                          context.read<UserListingBloc>().add(
+                                LoadUserListing(state.currentUserId!),
+                              );
+                        });
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        context.read<ListingBloc>().add(
+                              DeleteListing(id: listing.listingId!),
+                            );
+                        context.read<UserListingBloc>().add(
+                              LoadUserListing(state.currentUserId!),
+                            );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+  },
+)
+
+
+            ],
             ),
           ),
         ),

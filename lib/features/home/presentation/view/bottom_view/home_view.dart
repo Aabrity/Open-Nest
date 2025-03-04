@@ -137,94 +137,111 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
     );
   }
 
-  Widget _buildListingCard(BuildContext context, ListingEntity listing) {
-    // Decode Base64 Image
-    Widget listingImage;
-    if (listing.imageUrls.isNotEmpty && listing.imageUrls[0].startsWith("data:image")) {
-      try {
-        String base64String = listing.imageUrls[0].split(',').last;
-        Uint8List imageBytes = base64Decode(base64String);
-
-        listingImage = Image.memory(
-          imageBytes,
-          height: 120,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        );
-      } catch (e) {
-        listingImage = Image.asset(
-          'assets/placeholder.jpg',
-          height: 120,
-          width: double.infinity,
-          fit: BoxFit.cover,
-        );
-      }
-    } else {
-      listingImage = Image.asset(
-        'assets/placeholder.jpg',
-        height: 120,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      );
-    }
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider.value(
-              value: getIt<LikeBloc>(),
-              child: DetailPage(listing: listing),
-            ),
+ Widget _buildListingCard(BuildContext context, ListingEntity listing) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+            value: getIt<LikeBloc>(),
+            child: DetailPage(listing: listing),
           ),
-        );
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
         ),
-        elevation: 4,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
-              child: listingImage,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    listing.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+      );
+    },
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      elevation: 4,
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: listing.imageUrls.isNotEmpty &&
+                    listing.imageUrls[0].startsWith("data:image")
+                ? Image.memory(
+                    base64Decode(listing.imageUrls[0].split(',').last),
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : Image.asset(
+                    'assets/placeholder.jpg',
+                    height: 250,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
-                  SizedBox(height: 4),
-                  Text(
-                    "\$${listing.regularPrice} / month",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    "For : ${listing.type}",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  ),
-                  Text(
-                    " ${listing.address}",
-                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                  ),
-                ],
+          ),
+          Container(
+            height: 250,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Colors.black.withOpacity(0.1), Colors.black.withOpacity(0.7)],
               ),
             ),
-          ],
-        ),
+          ),
+          // Positioned(
+          //   top: 10,
+          //   right: 10,
+          //   child: Icon(
+          //     Icons.favorite_border,
+          //     color: Colors.white,
+          //     size: 24,
+          //   ),
+          // ),
+          Positioned(
+            bottom: 15,
+            left: 15,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  listing.name,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Icon(Icons.location_on, color: Colors.white, size: 14),
+                    SizedBox(width: 5),
+                    Text(
+                      listing.address,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 70,
+            left: 15,
+            child: Text(
+              "NRP ${listing.regularPrice}",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   @override
   void dispose() {

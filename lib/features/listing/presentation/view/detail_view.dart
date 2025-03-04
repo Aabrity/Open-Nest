@@ -1220,6 +1220,722 @@
 // }
 
 
+// import 'dart:convert';
+// import 'dart:typed_data';
+// import 'package:dartz/dartz.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:open_nest/app/di/di.dart';
+// import 'package:open_nest/core/error/failure.dart';
+// import 'package:open_nest/features/auth/domain/use_case/get_user_by_id_for_comment.dart';
+// import 'package:open_nest/features/auth/domain/entity/auth_entity.dart';
+// import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
+// import 'package:open_nest/features/listing/presentation/view/contact_form.dart';
+// import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
+// import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
+
+// class DetailPage extends StatelessWidget {
+//   final dynamic listing;
+
+//   const DetailPage({Key? key, required this.listing}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     // Fetch likes for the listing when the page is loaded
+//     context.read<LikeBloc>().add(LikeLoad(listingId: listing.listingId));
+
+//     Widget listingImage;
+//     if (listing.imageUrls.isNotEmpty && listing.imageUrls[0].startsWith("data:image")) {
+//       try {
+//         String base64String = listing.imageUrls[0].split(',').last;
+//         Uint8List imageBytes = base64Decode(base64String);
+
+//         listingImage = Image.memory(
+//           imageBytes,
+//           width: double.infinity,
+//           fit: BoxFit.cover,
+//         );
+//       } catch (e) {
+//         listingImage = Image.asset(
+//           'assets/placeholder.jpg',
+//           width: double.infinity,
+//           fit: BoxFit.cover,
+//         );
+//       }
+//     } else {
+//       listingImage = Image.asset(
+//         'assets/placeholder.jpg',
+//         width: double.infinity,
+//         fit: BoxFit.cover,
+//       );
+//     }
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           listing.name,
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             color: Colors.white,
+//             fontStyle: FontStyle.italic,
+//           ),
+//         ),
+//         foregroundColor: Colors.white,
+//         backgroundColor: Colors.black,
+//       ),
+//       body: SingleChildScrollView(
+//         child: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             ClipRRect(
+//               borderRadius: BorderRadius.vertical(bottom: Radius.circular(15.0)),
+//               child: listingImage,
+//             ),
+//             SizedBox(height: 16),
+
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     listing.name,
+//                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//                   ),
+//                   SizedBox(height: 8),
+//                   Text(
+//                     "\\${listing.regularPrice} / month",
+//                     style: TextStyle(fontSize: 18, color: Colors.green),
+//                   ),
+//                   SizedBox(height: 16),
+//                   Text(
+//                     "Description",
+//                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                   ),
+//                   SizedBox(height: 8),
+//                   Text(
+//                     listing.description,
+//                     style: TextStyle(fontSize: 16, color: Colors.black87),
+//                   ),
+//                   SizedBox(height: 16),
+
+//                   // Like and Comment Buttons
+//                   Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       BlocBuilder<LikeBloc, LikeState>(
+//                         builder: (context, state) {
+//                           final isLiked = state.likes.any((like) =>
+//                               like.listing == listing.listingId && like.user == state.currentUserId);
+//                           final likeCount = state.likes
+//                               .where((like) => like.listing == listing.listingId)
+//                               .length;
+
+//                           return Row(
+//                             children: [
+//                               ElevatedButton(
+//                                 onPressed: () {
+//                                   if (isLiked) {
+//                                     final like = state.likes.firstWhere((like) =>
+//                                         like.listing == listing.listingId &&
+//                                         like.user == state.currentUserId);
+//                                     context.read<LikeBloc>().add(
+//                                         DeleteLike(id: like.likeId!, listingId: listing.listingId));
+//                                   } else {
+//                                     context.read<LikeBloc>().add(
+//                                         CreateLike(listing: listing.listingId));
+//                                   }
+//                                 },
+//                                 style: ElevatedButton.styleFrom(
+//                                   backgroundColor: isLiked ? Colors.red : Colors.blue,
+//                                   shape: RoundedRectangleBorder(
+//                                     borderRadius: BorderRadius.circular(8.0),
+//                                 ),
+//                                 ),
+//                                 child: Row(
+//                                   children: [
+//                                     Icon(isLiked ? Icons.thumb_down : Icons.thumb_up),
+//                                     SizedBox(width: 8),
+//                                     Text(isLiked ? "Unlike" : "Like"),
+//                                   ],
+//                                 ),
+//                               ),
+//                               SizedBox(width: 8),
+//                               Text('$likeCount likes'),
+//                             ],
+//                           );
+//                         },
+//                       ),
+
+//                       ElevatedButton(
+//                         onPressed: () {
+//                           Navigator.push(
+//                             context,
+//                             MaterialPageRoute(
+//                               builder: (context) => BlocProvider.value(
+//                                 value: getIt<CommentBloc>(),
+//                                 child: CommentView(listingId: listing.listingId),
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                         style: ElevatedButton.styleFrom(
+//                           backgroundColor: Colors.black,
+//                           foregroundColor: Colors.white,
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(8.0),
+//                           ),
+//                         ),
+//                         child: Row(
+//                           children: [
+//                             Icon(Icons.comment),
+//                             SizedBox(width: 8),
+//                             Text("Comment"),
+//                           ],
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                   SizedBox(height: 16),
+
+//                   // Contact Landlord Section
+//                   FutureBuilder<Either<Failure, AuthEntity>>(
+//                     future: getIt<FetchUsernameByIdUseCase>().call(listing.userRef),
+//                     builder: (context, snapshot) {
+//                       if (snapshot.connectionState == ConnectionState.waiting) {
+//                         return Center(child: CircularProgressIndicator());
+//                       } else if (snapshot.hasError) {
+//                         return Text('Failed to load landlord details', style: TextStyle(color: Colors.red));
+//                       } else if (snapshot.hasData) {
+//                         return snapshot.data!.fold(
+//                           (failure) => Text('Failed to load landlord details', style: TextStyle(color: Colors.red)),
+//                           (landlord) {
+//                             return Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 Text(
+//                                   'Landlord Details',
+//                                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+//                                 ),
+//                                 SizedBox(height: 8),
+//                                 Text(
+//                                   'Name: ${landlord.username ?? 'Unknown'}',
+//                                   style: TextStyle(fontSize: 16, color: Colors.black87),
+//                                 ),
+//                                 Text(
+//                                   'Email: ${landlord.email}',
+//                                   style: TextStyle(fontSize: 16, color: Colors.black87),
+//                                 ),
+//                                 SizedBox(height: 16),
+
+//                                 // Contact Form
+//                                 ContactForm(landlordEmail: landlord.email),
+//                               ],
+//                             );
+//                           },
+//                         );
+//                       } else {
+//                         return Text('No landlord details available', style: TextStyle(color: Colors.grey));
+//                       }
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+// import 'dart:convert';
+// import 'dart:typed_data';
+// import 'package:dartz/dartz.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:open_nest/app/di/di.dart';
+// import 'package:open_nest/core/error/failure.dart';
+// import 'package:open_nest/features/auth/domain/use_case/get_user_by_id_for_comment.dart';
+// import 'package:open_nest/features/auth/domain/entity/auth_entity.dart';
+// import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
+// import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
+// import 'package:open_nest/features/listing/presentation/view/contact_form.dart';
+// import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+// class DetailPage extends StatelessWidget {
+//   final dynamic listing;
+//   final PanelController _panelController = PanelController();
+
+//   DetailPage({Key? key, required this.listing}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     context.read<LikeBloc>().add(LikeLoad(listingId: listing.listingId));
+
+//     Widget listingImage;
+//     if (listing.imageUrls.isNotEmpty && listing.imageUrls[0].startsWith("data:image")) {
+//       try {
+//         String base64String = listing.imageUrls[0].split(',').last;
+//         Uint8List imageBytes = base64Decode(base64String);
+
+//         listingImage = Image.memory(
+//           imageBytes,
+//           width: double.infinity,
+//           fit: BoxFit.cover,
+//         );
+//       } catch (e) {
+//         listingImage = Image.asset(
+//           'assets/placeholder.jpg',
+//           width: double.infinity,
+//           fit: BoxFit.cover,
+//         );
+//       }
+//     } else {
+//       listingImage = Image.asset(
+//         'assets/placeholder.jpg',
+//         width: double.infinity,
+//         fit: BoxFit.cover,
+//       );
+//     }
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           listing.name,
+//           style: const TextStyle(
+//             fontWeight: FontWeight.bold,
+//             color: Colors.white,
+//             fontStyle: FontStyle.italic,
+//           ),
+//         ),
+//         foregroundColor: Colors.white,
+//         backgroundColor: Colors.black,
+//         elevation: 0,
+//       ),
+//       body: SlidingUpPanel(
+//         controller: _panelController,
+//         minHeight: 80,
+//         maxHeight: MediaQuery.of(context).size.height * 0.7,
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+//         panelBuilder: (scrollController) => _buildCommentPanel(scrollController, context),
+//         body: SingleChildScrollView(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               ClipRRect(
+//                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15.0)),
+//                 child: listingImage,
+//               ),
+//               const SizedBox(height: 16),
+//               Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       listing.name,
+//                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text(
+//                       "\\${listing.regularPrice} / month",
+//                       style: const TextStyle(fontSize: 18, color: Colors.green),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     const Text(
+//                       "Description",
+//                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text(
+//                       listing.description,
+//                       style: const TextStyle(fontSize: 16, color: Colors.black87),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         BlocBuilder<LikeBloc, LikeState>(
+//                           builder: (context, state) {
+//                             final isLiked = state.likes.any((like) =>
+//                                 like.listing == listing.listingId && like.user == state.currentUserId);
+//                             final likeCount = state.likes
+//                                 .where((like) => like.listing == listing.listingId)
+//                                 .length;
+
+//                             return Row(
+//                               children: [
+//                                 ElevatedButton(
+//                                   onPressed: () {
+//                                     if (isLiked) {
+//                                       final like = state.likes.firstWhere((like) =>
+//                                           like.listing == listing.listingId &&
+//                                           like.user == state.currentUserId);
+//                                       context.read<LikeBloc>().add(
+//                                           DeleteLike(id: like.likeId!, listingId: listing.listingId));
+//                                     } else {
+//                                       context.read<LikeBloc>().add(
+//                                           CreateLike(listing: listing.listingId));
+//                                     }
+//                                   },
+//                                   style: ElevatedButton.styleFrom(
+//                                     backgroundColor: isLiked ? Colors.red : Colors.blue,
+//                                     shape: RoundedRectangleBorder(
+//                                       borderRadius: BorderRadius.circular(8.0),
+//                                     ),
+//                                   ),
+//                                   child: Row(
+//                                     children: [
+//                                       Icon(isLiked ? Icons.thumb_down : Icons.thumb_up),
+//                                       const SizedBox(width: 8),
+//                                       Text(isLiked ? "Unlike" : "Like"),
+//                                     ],
+//                                   ),
+//                                 ),
+//                                 const SizedBox(width: 8),
+//                                 Text('$likeCount likes'),
+//                               ],
+//                             );
+//                           },
+//                         ),
+//                         ElevatedButton(
+//                           onPressed: () => _panelController.open(),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: Colors.black,
+//                             foregroundColor: Colors.white,
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(8.0),
+//                             ),
+//                           ),
+//                           child: const Row(
+//                             children: [
+//                               Icon(Icons.comment),
+//                               SizedBox(width: 8),
+//                               Text("Comment"),
+//                             ],
+//                           ),
+                          
+                          
+//                         ),
+//                       ],
+                      
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+            
+//           ),
+          
+//         ),
+//       ),
+      
+//     );
+//   }
+
+//   Widget _buildCommentPanel(ScrollController scrollController, BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.1),
+//             blurRadius: 10,
+//             spreadRadius: 5,
+//           ),
+//         ],
+//       ),
+//       child: Column(
+//         children: [
+//           Center(
+//             child: Container(
+//               margin: const EdgeInsets.only(top: 8),
+//               width: 40,
+//               height: 5,
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//           Expanded(
+//             child: BlocProvider.value(
+//               value: getIt<CommentBloc>(),
+//               child: CommentView(listingId: listing.listingId),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+
+
+// import 'dart:convert';
+// import 'dart:typed_data';
+// import 'package:dartz/dartz.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:open_nest/app/di/di.dart';
+// import 'package:open_nest/core/error/failure.dart';
+// import 'package:open_nest/features/auth/domain/use_case/get_user_by_id_for_comment.dart';
+// import 'package:open_nest/features/auth/domain/entity/auth_entity.dart';
+// import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
+// import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
+// import 'package:open_nest/features/listing/presentation/view/contact_form.dart';
+// import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+// class DetailPage extends StatelessWidget {
+//   final dynamic listing;
+//   final PanelController _panelController = PanelController();
+
+//   DetailPage({Key? key, required this.listing}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     context.read<LikeBloc>().add(LikeLoad(listingId: listing.listingId));
+
+//     Widget listingImage;
+//     if (listing.imageUrls.isNotEmpty && listing.imageUrls[0].startsWith("data:image")) {
+//       try {
+//         String base64String = listing.imageUrls[0].split(',').last;
+//         Uint8List imageBytes = base64Decode(base64String);
+
+//         listingImage = Image.memory(
+//           imageBytes,
+//           width: double.infinity,
+//           fit: BoxFit.cover,
+//         );
+//       } catch (e) {
+//         listingImage = Image.asset(
+//           'assets/placeholder.jpg',
+//           width: double.infinity,
+//           fit: BoxFit.cover,
+//         );
+//       }
+//     } else {
+//       listingImage = Image.asset(
+//         'assets/placeholder.jpg',
+//         width: double.infinity,
+//         fit: BoxFit.cover,
+//       );
+//     }
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           listing.name,
+//           style: const TextStyle(
+//             fontWeight: FontWeight.bold,
+//             color: Colors.white,
+//             fontStyle: FontStyle.italic,
+//           ),
+//         ),
+//         foregroundColor: Colors.white,
+//         backgroundColor: Colors.black,
+//         elevation: 0,
+//       ),
+//       body: SlidingUpPanel(
+//         controller: _panelController,
+//         minHeight: 80,
+//         maxHeight: MediaQuery.of(context).size.height * 0.7,
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+//         panelBuilder: (scrollController) => _buildCommentPanel(scrollController, context),
+//         body: SingleChildScrollView(
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               ClipRRect(
+//                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15.0)),
+//                 child: listingImage,
+//               ),
+//               const SizedBox(height: 16),
+//               Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       listing.name,
+//                       style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text(
+//                       "\\${listing.regularPrice} / month",
+//                       style: const TextStyle(fontSize: 18, color: Colors.green),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     const Text(
+//                       "Description",
+//                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text(
+//                       listing.description,
+//                       style: const TextStyle(fontSize: 16, color: Colors.black87),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         BlocBuilder<LikeBloc, LikeState>(
+//                           builder: (context, state) {
+//                             final isLiked = state.likes.any((like) =>
+//                                 like.listing == listing.listingId && like.user == state.currentUserId);
+//                             final likeCount = state.likes
+//                                 .where((like) => like.listing == listing.listingId)
+//                                 .length;
+
+//                             return Row(
+//                               children: [
+//                                 ElevatedButton(
+//                                   onPressed: () {
+//                                     if (isLiked) {
+//                                       final like = state.likes.firstWhere((like) =>
+//                                           like.listing == listing.listingId &&
+//                                           like.user == state.currentUserId);
+//                                       context.read<LikeBloc>().add(
+//                                           DeleteLike(id: like.likeId!, listingId: listing.listingId));
+//                                     } else {
+//                                       context.read<LikeBloc>().add(
+//                                           CreateLike(listing: listing.listingId));
+//                                     }
+//                                   },
+//                                   style: ElevatedButton.styleFrom(
+//                                     backgroundColor: isLiked ? Colors.red : Colors.blue,
+//                                     shape: RoundedRectangleBorder(
+//                                       borderRadius: BorderRadius.circular(8.0),
+//                                     ),
+//                                   ),
+//                                   child: Row(
+//                                     children: [
+//                                       Icon(isLiked ? Icons.thumb_down : Icons.thumb_up),
+//                                       const SizedBox(width: 8),
+//                                       Text(isLiked ? "Unlike" : "Like"),
+//                                     ],
+//                                   ),
+//                                 ),
+//                                 const SizedBox(width: 8),
+//                                 Text('$likeCount likes'),
+//                               ],
+//                             );
+//                           },
+//                         ),
+//                         ElevatedButton(
+//                           onPressed: () => _panelController.open(),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: Colors.black,
+//                             foregroundColor: Colors.white,
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(8.0),
+//                             ),
+//                           ),
+//                           child: const Row(
+//                             children: [
+//                               Icon(Icons.comment),
+//                               SizedBox(width: 8),
+//                               Text("Comment"),
+//                             ],
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                     SizedBox(height: 16), // Added SizedBox here.
+//                     FutureBuilder<Either<Failure, AuthEntity>>(
+//                       future: getIt<FetchUsernameByIdUseCase>().call(listing.userRef),
+//                       builder: (context, snapshot) {
+//                         if (snapshot.connectionState == ConnectionState.waiting) {
+//                           return Center(child: CircularProgressIndicator());
+//                         } else if (snapshot.hasError) {
+//                           return Text('Failed to load landlord details', style: TextStyle(color: Colors.red));
+//                         } else if (snapshot.hasData) {
+//                           return snapshot.data!.fold(
+//                             (failure) => Text('Failed to load landlord details', style: TextStyle(color: Colors.red)),
+//                             (landlord) {
+//                               return Column(
+//                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                 children: [
+//                                   Text(
+//                                     'Landlord Details',
+//                                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+//                                   ),
+//                                   SizedBox(height: 8),
+//                                   Text(
+//                                     'Name: ${landlord.username ?? 'Unknown'}',
+//                                     style: TextStyle(fontSize: 16, color: Colors.black87),
+//                                   ),
+//                                   Text(
+//                                     'Email: ${landlord.email}',
+//                                     style: TextStyle(fontSize: 16, color: Colors.black87),
+//                                   ),
+//                                   SizedBox(height: 16),
+//                                   ContactForm(landlordEmail: landlord.email),
+//                                 ],
+//                               );
+//                             },
+//                           );
+//                         } else {
+//                           return Text('No landlord details available', style: TextStyle(color: Colors.grey));
+//                         }
+//                       },
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//    Widget _buildCommentPanel(ScrollController scrollController, BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.1),
+//             blurRadius: 10,
+//             spreadRadius: 5,
+//           ),
+//         ],
+//       ),
+//       child: Column(
+//         children: [
+//           Center(
+//             child: Container(
+//               margin: const EdgeInsets.only(top: 8),
+//               width: 40,
+//               height: 5,
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//           Expanded(
+//             child: BlocProvider.value(
+//               value: getIt<CommentBloc>(),
+//               child: CommentView(listingId: listing.listingId),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
@@ -1229,19 +1945,20 @@ import 'package:open_nest/app/di/di.dart';
 import 'package:open_nest/core/error/failure.dart';
 import 'package:open_nest/features/auth/domain/use_case/get_user_by_id_for_comment.dart';
 import 'package:open_nest/features/auth/domain/entity/auth_entity.dart';
+import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
 import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
 import 'package:open_nest/features/listing/presentation/view/contact_form.dart';
-import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
 import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DetailPage extends StatelessWidget {
   final dynamic listing;
+  final PanelController _panelController = PanelController();
 
-  const DetailPage({Key? key, required this.listing}) : super(key: key);
+  DetailPage({Key? key, required this.listing}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Fetch likes for the listing when the page is loaded
     context.read<LikeBloc>().add(LikeLoad(listingId: listing.listingId));
 
     Widget listingImage;
@@ -1274,7 +1991,7 @@ class DetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           listing.name,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
             fontStyle: FontStyle.italic,
@@ -1282,169 +1999,422 @@ class DetailPage extends StatelessWidget {
         ),
         foregroundColor: Colors.white,
         backgroundColor: Colors.black,
+        elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(15.0)),
-              child: listingImage,
-            ),
-            SizedBox(height: 16),
+      body: SlidingUpPanel(
+        controller: _panelController,
+        minHeight: 80,
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+        panelBuilder: (scrollController) => _buildCommentPanel(scrollController, context),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.vertical(bottom: Radius.circular(15.0)),
+                child: listingImage,
+              ),
+              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      listing.name,
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      "\\${listing.regularPrice} / month",
+                      style: const TextStyle(fontSize: 18, color: Colors.green),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Description",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      listing.description,
+                      style: const TextStyle(fontSize: 16, color: Colors.black87),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BlocBuilder<LikeBloc, LikeState>(
+                          builder: (context, state) {
+                            final isLiked = state.likes.any((like) =>
+                                like.listing == listing.listingId && like.user == state.currentUserId);
+                            final likeCount = state.likes
+                                .where((like) => like.listing == listing.listingId)
+                                .length;
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    listing.name,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "\\${listing.regularPrice} / month",
-                    style: TextStyle(fontSize: 18, color: Colors.green),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    "Description",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    listing.description,
-                    style: TextStyle(fontSize: 16, color: Colors.black87),
-                  ),
-                  SizedBox(height: 16),
-
-                  // Like and Comment Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BlocBuilder<LikeBloc, LikeState>(
-                        builder: (context, state) {
-                          final isLiked = state.likes.any((like) =>
-                              like.listing == listing.listingId && like.user == state.currentUserId);
-                          final likeCount = state.likes
-                              .where((like) => like.listing == listing.listingId)
-                              .length;
-
-                          return Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (isLiked) {
-                                    final like = state.likes.firstWhere((like) =>
-                                        like.listing == listing.listingId &&
-                                        like.user == state.currentUserId);
-                                    context.read<LikeBloc>().add(
-                                        DeleteLike(id: like.likeId!, listingId: listing.listingId));
-                                  } else {
-                                    context.read<LikeBloc>().add(
-                                        CreateLike(listing: listing.listingId));
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: isLiked ? Colors.red : Colors.blue,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Icon(isLiked ? Icons.thumb_down : Icons.thumb_up),
-                                    SizedBox(width: 8),
-                                    Text(isLiked ? "Unlike" : "Like"),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Text('$likeCount likes'),
-                            ],
-                          );
-                        },
-                      ),
-
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BlocProvider.value(
-                                value: getIt<CommentBloc>(),
-                                child: CommentView(listingId: listing.listingId),
-                              ),
-                            ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.comment),
-                            SizedBox(width: 8),
-                            Text("Comment"),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-
-                  // Contact Landlord Section
-                  FutureBuilder<Either<Failure, AuthEntity>>(
-                    future: getIt<FetchUsernameByIdUseCase>().call(listing.userRef),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Text('Failed to load landlord details', style: TextStyle(color: Colors.red));
-                      } else if (snapshot.hasData) {
-                        return snapshot.data!.fold(
-                          (failure) => Text('Failed to load landlord details', style: TextStyle(color: Colors.red)),
-                          (landlord) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            return Row(
                               children: [
-                                Text(
-                                  'Landlord Details',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    if (isLiked) {
+                                      final like = state.likes.firstWhere((like) =>
+                                          like.listing == listing.listingId &&
+                                          like.user == state.currentUserId);
+                                      context.read<LikeBloc>().add(
+                                          DeleteLike(id: like.likeId!, listingId: listing.listingId));
+                                    } else {
+                                      context.read<LikeBloc>().add(
+                                          CreateLike(listing: listing.listingId));
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: isLiked ? Colors.red : Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(isLiked ? Icons.thumb_down : Icons.thumb_up),
+                                      const SizedBox(width: 8),
+                                      Text(isLiked ? "Unlike" : "Like"),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Name: ${landlord.username ?? 'Unknown'}',
-                                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                                ),
-                                Text(
-                                  'Email: ${landlord.email}',
-                                  style: TextStyle(fontSize: 16, color: Colors.black87),
-                                ),
-                                SizedBox(height: 16),
-
-                                // Contact Form
-                                ContactForm(landlordEmail: landlord.email),
+                                const SizedBox(width: 8),
+                                Text('$likeCount likes'),
                               ],
                             );
                           },
-                        );
-                      } else {
-                        return Text('No landlord details available', style: TextStyle(color: Colors.grey));
-                      }
-                    },
-                  ),
-                ],
+                        ),
+                        // ElevatedButton(
+                        //   onPressed: () => _panelController.open(),
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: Colors.black,
+                        //     foregroundColor: Colors.white,
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(8.0),
+                        //     ),
+                        //   ),
+                        //   child: const Row(
+                        //     children: [
+                        //       Icon(Icons.comment),
+                        //       SizedBox(width: 8),
+                        //       Text("Comment"),
+                        //     ],
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    FutureBuilder<Either<Failure, AuthEntity>>(
+                      future: getIt<FetchUsernameByIdUseCase>().call(listing.userRef),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Text(
+                            'Failed to load landlord details',
+                            style: TextStyle(color: Colors.red),
+                          );
+                        } else if (snapshot.hasData) {
+                          return snapshot.data!.fold(
+                            (failure) => Text(
+                              'Failed to load landlord details',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            (landlord) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Landlord Details',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    'Name: ${landlord.username ?? 'Unknown'}',
+                                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                                  ),
+                                  Text(
+                                    'Email: ${landlord.email}',
+                                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  ContactForm(landlordEmail: landlord.email),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          return Text(
+                            'No landlord details available',
+                            style: TextStyle(color: Colors.grey),
+                          );
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 250),
+                     // Add extra space at the bottom
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
+  Widget _buildCommentPanel(ScrollController scrollController, BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+      )],
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 12),
+          Center(
+            child: Container(
+              width: 40,
+              height: 5,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2.5),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            "Comments",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: BlocProvider(
+              create: (context) => getIt<CommentBloc>()..add(CommentLoad(listingId: listing.listingId)),
+              child: CommentView(listingId: listing.listingId),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
+
+// import 'dart:convert';
+// import 'dart:typed_data';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:open_nest/features/comments/presentation/view/comment_view.dart';
+// import 'package:open_nest/features/comments/presentation/view_model/comment_bloc.dart';
+// import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
+
+// class DetailPage extends StatelessWidget {
+//   final dynamic listing;
+//   final PanelController _panelController = PanelController();
+
+//   DetailPage({Key? key, required this.listing}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     context.read<LikeBloc>().add(LikeLoad(listingId: listing.listingId));
+
+//     Widget listingImage;
+//     if (listing.imageUrls.isNotEmpty && listing.imageUrls[0].startsWith("data:image")) {
+//       try {
+//         String base64String = listing.imageUrls[0].split(',').last;
+//         Uint8List imageBytes = base64Decode(base64String);
+
+//         listingImage = ClipRRect(
+//           borderRadius: BorderRadius.circular(20),
+//           child: Image.memory(
+//             imageBytes,
+//             width: double.infinity,
+//             height: 250,
+//             fit: BoxFit.cover,
+//           ),
+//         );
+//       } catch (e) {
+//         listingImage = Image.asset(
+//           'assets/placeholder.jpg',
+//           width: double.infinity,
+//           height: 250,
+//           fit: BoxFit.cover,
+//         );
+//       }
+//     } else {
+//       listingImage = Image.asset(
+//         'assets/placeholder.jpg',
+//         width: double.infinity,
+//         height: 250,
+//         fit: BoxFit.cover,
+//       );
+//     }
+
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               listingImage,
+//               Padding(
+//                 padding: const EdgeInsets.all(16.0),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Text(
+//                           listing.name,
+//                           style: const TextStyle(
+//                             fontSize: 24,
+//                             fontWeight: FontWeight.bold,
+//                           ),
+//                         ),
+//                         Container(
+//                           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+//                           decoration: BoxDecoration(
+//                             color: Colors.white,
+//                             borderRadius: BorderRadius.circular(20),
+//                             boxShadow: [
+//                               BoxShadow(
+//                                 color: Colors.grey.withOpacity(0.3),
+//                                 blurRadius: 5,
+//                               ),
+//                             ],
+//                           ),
+//                           child: Text(
+//                             "\${listing.regularPrice} ",
+//                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text(
+//                       listing.description,
+//                       style: const TextStyle(fontSize: 16, color: Colors.black87),
+//                     ),
+//                     const SizedBox(height: 16),
+//                     Row(
+//                       children: [
+//                         BlocBuilder<LikeBloc, LikeState>(
+//                           builder: (context, state) {
+//                             final isLiked = state.likes.any((like) =>
+//                                 like.listing == listing.listingId && like.user == state.currentUserId);
+//                             final likeCount = state.likes
+//                                 .where((like) => like.listing == listing.listingId)
+//                                 .length;
+
+//                             return IconButton(
+//                               onPressed: () {
+//                                 if (isLiked) {
+//                                   final like = state.likes.firstWhere((like) =>
+//                                       like.listing == listing.listingId &&
+//                                       like.user == state.currentUserId);
+//                                   context.read<LikeBloc>().add(
+//                                       DeleteLike(id: like.likeId!, listingId: listing.listingId));
+//                                 } else {
+//                                   context.read<LikeBloc>().add(
+//                                       CreateLike(listing: listing.listingId));
+//                                 }
+//                               },
+//                               icon: Icon(
+//                                 isLiked ? Icons.favorite : Icons.favorite_border,
+//                                 color: isLiked ? Colors.red : Colors.grey,
+//                                 size: 28,
+//                               ),
+//                             );
+//                           },
+//                         ),
+//                         const SizedBox(width: 8),
+//                         ElevatedButton(
+//                           onPressed: () => _panelController.open(),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: Colors.black,
+//                             foregroundColor: Colors.white,
+//                             shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(8.0),
+//                             ),
+//                           ),
+//                           child: const Row(
+//                             children: [
+//                               Icon(Icons.comment),
+//                               SizedBox(width: 8),
+//                               Text("Comment"),
+//                             ],
+//                           ),
+//                         ),
+                        
+//                       ],
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//           SlidingUpPanel(
+//             controller: _panelController,
+//             minHeight: 80,
+//             maxHeight: MediaQuery.of(context).size.height * 0.7,
+//             borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+//             panelBuilder: (scrollController) => _buildCommentPanel(scrollController, context),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildCommentPanel(ScrollController scrollController, BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: const BorderRadius.vertical(top: Radius.circular(25.0)),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.black.withOpacity(0.1),
+//             blurRadius: 10,
+//             spreadRadius: 5,
+//           ),
+//         ],
+//       ),
+//       child: Column(
+//         children: [
+//           Center(
+//             child: Container(
+//               margin: const EdgeInsets.only(top: 8),
+//               width: 40,
+//               height: 5,
+//               decoration: BoxDecoration(
+//                 color: Colors.grey[300],
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+//           Expanded(
+//             child: BlocProvider.value(
+//               value: BlocProvider.of<CommentBloc>(context),
+//               child: CommentView(listingId: listing.listingId),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
