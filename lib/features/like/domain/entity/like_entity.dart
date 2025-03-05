@@ -11,7 +11,7 @@ class LikeEntity extends Equatable {
   const LikeEntity({
     this.likeId,
     required this.listing,
-    required this.user,
+    required this.user, 
   
   });
 

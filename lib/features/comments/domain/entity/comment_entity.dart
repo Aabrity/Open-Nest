@@ -12,7 +12,7 @@ class CommentEntity extends Equatable {
     this.commentId,
     required this.listing,
     required this.comment,
-    required this.user,
+    required this.user, 
  
   });
 

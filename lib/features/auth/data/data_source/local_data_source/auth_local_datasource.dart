@@ -55,8 +55,18 @@ class AuthLocalDataSource implements IAuthDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> updateUser(String id, AuthEntity updatedUser, String token) {
-    // TODO: implement updateUser
-    throw UnimplementedError();
+   Future<Either<Failure, void>> updateUser(
+      String id, AuthEntity updatedUser, String token) async {
+    try {
+      final existingUser = await _hiveService.getProfile(id);
+      if (existingUser == null) {
+        return Left(LocalDatabaseFailure(message: "User not found")); 
+      }
+      final updatedHiveModel = AuthHiveModel.fromEntity(updatedUser);
+      await _hiveService.updateProfile(updatedHiveModel);
+      return const Right(null);
+    } catch (e) {
+      return Left(LocalDatabaseFailure(message: e.toString())); 
+    }
   }
 }

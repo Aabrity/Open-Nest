@@ -34,7 +34,7 @@ class ListingEntity extends Equatable {
   required this.type,
   required this.offer,
   required this.imageUrls,
-  required this.userRef,
+  required this.userRef, 
  
 
   });

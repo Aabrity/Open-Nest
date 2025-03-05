@@ -21,11 +21,6 @@ class AuthRemoteRepository implements IAuthRepository {
     }
   }
 
-  // @override
-  // List<Either<Failure, AuthEntity>> getCurrentUser(String token) {
-  //   // TODO: implement getCurrentUser
-  //   throw UnimplementedError();
-  // }
 
   @override
   Future<Either<Failure, String>> loginUser(
