@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_nest/app/di/di.dart';
+import 'package:open_nest/features/comments/presentation/view_model/user_info_cubit/user_info_cubit.dart';
 import 'package:open_nest/features/like/presentation/view_model/like_bloc.dart';
 import 'package:open_nest/features/listing/domain/entity/listing_entity.dart';
 import 'package:open_nest/features/listing/presentation/view/detail_view.dart';
@@ -26,8 +27,6 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
     _tabController = TabController(length: 2, vsync: this);
     context.read<ListingBloc>().add(ListingLoadAll());
 
-  
-
     // Listen to tab index changes to scroll to the appropriate section
     _tabController.addListener(() {
       if (_tabController.index == 0) {
@@ -42,11 +41,17 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
-      } });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Check if the screen is a tablet or mobile
+    bool isTablet = screenWidth > 600;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -81,6 +86,9 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
           List<ListingEntity> saleListings = state.listings.where((listing) => listing.type == 'sale').toList();
           List<ListingEntity> rentListings = state.listings.where((listing) => listing.type == 'rent').toList();
 
+          // Set the number of items per row for grid based on device type
+          int crossAxisCount = isTablet ? 4 : 2;
+
           return SingleChildScrollView(
             controller: _scrollController,
             child: Padding(
@@ -88,7 +96,7 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_tabController.index == 0 ) ...[
+                  if (_tabController.index == 0) ...[
                     // Sale Listings Section
                     Text("SALE", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     SizedBox(height: 10),
@@ -97,10 +105,10 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: saleListings.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                        crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        childAspectRatio: 0.75,
+                        childAspectRatio: 0.75, // Adjust for tablets
                       ),
                       itemBuilder: (context, index) {
                         final listing = saleListings[index];
@@ -117,16 +125,17 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
                       physics: NeverScrollableScrollPhysics(),
                       itemCount: rentListings.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
+                        crossAxisCount: crossAxisCount,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
-                        childAspectRatio: 0.75,
+                        childAspectRatio: 0.75, // Adjust for tablets
                       ),
                       itemBuilder: (context, index) {
                         final listing = rentListings[index];
                         return _buildListingCard(context, listing);
                       },
                     ),
+                     SizedBox(height: 50),
                   ],
                 ],
               ),
@@ -137,111 +146,105 @@ class _ListingPageState extends State<ListingPage> with SingleTickerProviderStat
     );
   }
 
- Widget _buildListingCard(BuildContext context, ListingEntity listing) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => BlocProvider.value(
-            value: getIt<LikeBloc>(),
-            child: DetailPage(listing: listing),
-          ),
-        ),
-      );
-    },
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      elevation: 4,
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: listing.imageUrls.isNotEmpty &&
-                    listing.imageUrls[0].startsWith("data:image")
-                ? Image.memory(
-                    base64Decode(listing.imageUrls[0].split(',').last),
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : Image.asset(
-                    'assets/placeholder.jpg',
-                    height: 250,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-          ),
-          Container(
-            height: 250,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.black.withOpacity(0.1), Colors.black.withOpacity(0.7)],
-              ),
-            ),
-          ),
-          // Positioned(
-          //   top: 10,
-          //   right: 10,
-          //   child: Icon(
-          //     Icons.favorite_border,
-          //     color: Colors.white,
-          //     size: 24,
-          //   ),
-          // ),
-          Positioned(
-            bottom: 15,
-            left: 15,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  listing.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 5),
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: Colors.white, size: 14),
-                    SizedBox(width: 5),
-                    Text(
-                      listing.address,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
+  Widget _buildListingCard(BuildContext context, ListingEntity listing) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MultiBlocProvider(
+              providers: [
+                BlocProvider.value(value: getIt<LikeBloc>()),
+                BlocProvider(create: (context) => getIt<UserCubit>()), // Ensure UserCubit stays alive
               ],
+              child: DetailPage(listing: listing),
             ),
           ),
-          Positioned(
-            bottom: 70,
-            left: 15,
-            child: Text(
-              "NRP ${listing.regularPrice}",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+        );
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        elevation: 4,
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: listing.imageUrls.isNotEmpty &&
+                      listing.imageUrls[0].startsWith("data:image")
+                  ? Image.memory(
+                      base64Decode(listing.imageUrls[0].split(',').last),
+                      height: 400,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.asset(
+                      'assets/placeholder.jpg',
+                      height: 420,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+            Container(
+              height: 420,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.black.withOpacity(0.1), Colors.black.withOpacity(0.7)],
+                ),
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 15,
+              left: 15,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    listing.name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, color: Colors.white, size: 14),
+                      SizedBox(width: 5),
+                      Text(
+                        listing.address,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: 70,
+              left: 15,
+              child: Text(
+                "NRP ${listing.regularPrice}",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   @override
   void dispose() {

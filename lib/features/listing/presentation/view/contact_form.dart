@@ -81,6 +81,7 @@ class _ContactFormState extends State<ContactForm> {
 
   // Function to send email using flutter_email_sender
   void _sendEmail(String landlordEmail, String message) async {
+    
     final Email email = Email(
       body: message, // Use the user's message as the email body
       subject: 'Regarding Your Listing',
@@ -89,11 +90,14 @@ class _ContactFormState extends State<ContactForm> {
     );
 
     try {
+     
       await FlutterEmailSender.send(email);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Email sent successfully!')),
       );
     } catch (error) {
+     
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to send email: $error')),
       );
