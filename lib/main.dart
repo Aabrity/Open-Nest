@@ -12,7 +12,6 @@ void main() async {
   // await HiveService().clearAll();
   // Initialize Dependencies
   await initDependencies();
-
   runApp(
     
     App(),

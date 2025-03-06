@@ -55,6 +55,17 @@ class AuthApiModel extends Equatable {
     );
   }
 
+  
+  // Convert List of CommentApiModel to List of CommentEntity
+  static List<AuthEntity> toEntityList(List<AuthApiModel> models) {
+    return models.map((model) => model.toEntity()).toList();
+  }
+
+  // Convert List of CommentEntity to List of CommentApiModel
+  static List<AuthApiModel> fromEntityList(List<AuthEntity> entities) {
+    return entities.map((entity) => AuthApiModel.fromEntity(entity)).toList();
+  }
+
   @override
   List<Object?> get props =>
       [id, username, email, password, avatar, isAdmin, subscription];

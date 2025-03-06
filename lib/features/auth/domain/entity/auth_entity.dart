@@ -23,10 +23,11 @@ class AuthEntity extends Equatable {
       : userId = '',
         username = '',
         email = '',
+        password = '',
         avatar = '',
         isAdmin = false,
-        subscription = false,
-        password = '';
+        subscription = false;
+       
 
 
 

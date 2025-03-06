@@ -71,23 +71,28 @@ void main() {
       verifyNever(() => tokenSharedPrefs.saveToken(any()));
     });
 
+  
     test('Returns successfully and returns token', () async {
-      when(() => repository.loginUser(any(), any()))
-          .thenAnswer((_) async => const Right(generatedToken));
-      when(() => tokenSharedPrefs.saveToken(any()))
-          .thenAnswer((_) async => Right(null));
-       when(() => tokenSharedPrefs.getToken())
-          .thenAnswer((_) async => const Right(generatedToken));
+  // Use a valid JWT token
+  const generatedmockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
 
+  // Mock the repository and shared preferences
+  when(() => repository.loginUser(any(), any()))
+      .thenAnswer((_) async => const Right(generatedmockToken));
+  when(() => tokenSharedPrefs.saveToken(any()))
+      .thenAnswer((_) async => Right(null));
+  when(() => tokenSharedPrefs.getToken())
+      .thenAnswer((_) async => const Right(generatedmockToken));
 
+  // Call the use case
+  final result = await loginUseCase(loginParams);
 
-      final result = await loginUseCase(loginParams);
-
-      expect(result, const Right(generatedToken));
-      verify(() => repository.loginUser(
-          loginParams.username, loginParams.password)).called(1);
-      verify(() => tokenSharedPrefs.saveToken(generatedToken)).called(1);
-      verify(() => tokenSharedPrefs.getToken()).called(1);
-    });
+  // Verify the result and interactions
+  expect(result, const Right(generatedmockToken));
+  verify(() => repository.loginUser(
+      loginParams.username, loginParams.password)).called(1);
+  verify(() => tokenSharedPrefs.saveToken(generatedmockToken)).called(1);
+  verify(() => tokenSharedPrefs.getToken()).called(1);
+});
   });
 }
