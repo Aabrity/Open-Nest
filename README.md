@@ -9,6 +9,10 @@ Screenshot of Screens.
 ![image](https://github.com/user-attachments/assets/3bca7314-908c-425a-8285-d49ccf92f8c1)
 ![image](https://github.com/user-attachments/assets/6acc894a-22e2-4cfa-a69c-3c6316dc146a)
 ![image](https://github.com/user-attachments/assets/62c0e9c4-2c69-4139-a665-39fe6eceb746)
+![image](https://github.com/user-attachments/assets/b7da188f-5378-45fd-8ef8-5411a1ea65c9)
+![image](https://github.com/user-attachments/assets/dcadf9f6-4f68-4d2b-90be-a8c05e53f6b9)
+
+
 
 
 
